@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    paths: ["atl/**", "tests/**", "config/**", "requirements.txt"]
+    paths: ["atl/**", "tests/**", "config/**", "requirements.txt", "scripts/**", ".github/workflows/ci.yml"]
   pull_request:
 jobs:
   test:
