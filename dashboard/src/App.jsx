@@ -124,6 +124,7 @@ function describeEvent(e) {
     case "SYSTEM_INIT": return `holdout ${d.holdout.join(" → ")} · ${d.priors}`;
     case "HOLDOUT_ACCESS": return `spec ${d.spec_hash}`;
     case "CONFIG_CHANGE": return `config ${d.old} → ${d.new}`;
+    case "NOTE": return d.text;
     default: return JSON.stringify(d).slice(0, 140);
   }
 }

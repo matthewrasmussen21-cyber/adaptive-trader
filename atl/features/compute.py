@@ -16,36 +16,62 @@ def _ret(px: pd.DataFrame, k: int) -> pd.DataFrame:
     return px / px.shift(k) - 1
 
 
+class _Fundamentals:
+    """Point-in-time fundamentals on the panel grid, materialized one metric at a time
+    (float32) so memory stays bounded. A filing becomes effective the trading day AFTER
+    its filing date (1-day lag) and goes stale after STALE_DAYS without a new filing."""
+
+    def __init__(self, p: Panel):
+        self.p = p
+        D, N = len(p.dates), len(p.tickers)
+        self.shape = (D, N)
+        self.snaps = None
+        if p.snapshots is None or p.snapshots.empty:
+            return
+        snaps = p.snapshots.dropna(subset=["cik"]).copy()
+        snaps["cik"] = snaps["cik"].astype(int)
+        snaps = snaps.sort_values(["cik", "avail"]).reset_index(drop=True)
+        cik_of = p.listings["cik"]
+        col_of_cik: dict[int, list[int]] = {}
+        for j, c in enumerate(cik_of.values):
+            if c is not None and not pd.isna(c):
+                col_of_cik.setdefault(int(c), []).append(j)
+        rows = np.searchsorted(p.dates.values, (snaps["avail"] + pd.Timedelta(days=1)).values, side="left")
+        R, J, S = [], [], []
+        for idx, (c, r) in enumerate(zip(snaps["cik"].values, rows)):
+            if r >= D:
+                continue
+            for j in col_of_cik.get(int(c), ()):
+                R.append(r); J.append(j); S.append(idx)
+        if not R:
+            return
+        k = pd.DataFrame({"R": R, "J": J, "S": S}).drop_duplicates(["R", "J"], keep="last")
+        self.R, self.J, self.S = k["R"].to_numpy(), k["J"].to_numpy(), k["S"].to_numpy()
+        self.snaps = snaps
+
+    def _ffill(self, arr: np.ndarray) -> pd.DataFrame:
+        return pd.DataFrame(arr, index=self.p.dates, columns=self.p.tickers).ffill(limit=STALE_DAYS)
+
+    def get(self, col: str) -> pd.DataFrame:
+        arr = np.full(self.shape, np.nan, dtype="float32")
+        if self.snaps is not None and col in self.snaps:
+            arr[self.R, self.J] = self.snaps[col].to_numpy(dtype="float32")[self.S]
+        return self._ffill(arr)
+
+    def since(self) -> pd.DataFrame:
+        arr = np.full(self.shape, np.nan, dtype="float32")
+        if self.snaps is not None:
+            arr[self.R, self.J] = self.R.astype("float32")
+        last = self._ffill(arr)
+        return (pd.DataFrame(np.arange(self.shape[0], dtype="float32")[:, None].repeat(self.shape[1], axis=1),
+                             index=self.p.dates, columns=self.p.tickers) - last)
+
+
 def _asof_fundamentals(p: Panel, cols: list[str]) -> dict[str, pd.DataFrame]:
-    out = {c: pd.DataFrame(np.nan, index=p.dates, columns=p.tickers) for c in cols}
-    out["_since"] = pd.DataFrame(np.nan, index=p.dates, columns=p.tickers)
-    if p.snapshots is None or p.snapshots.empty:
-        return out
-    cik_of = p.listings["cik"]
-    snaps = p.snapshots.dropna(subset=["cik"]).copy()
-    snaps["cik"] = snaps["cik"].astype(int)
-    by_cik = dict(tuple(snaps.groupby("cik")))
-    dates = p.dates.values
-    for j, t in enumerate(p.tickers):
-        c = cik_of.get(t)
-        if c is None or pd.isna(c) or int(c) not in by_cik:
-            continue
-        s = by_cik[int(c)].sort_values("avail")
-        # effective the trading day AFTER the filing date (1-day lag)
-        rows = np.searchsorted(dates, (s["avail"] + pd.Timedelta(days=1)).values, side="left")
-        keep = rows < len(dates)
-        s, rows = s[keep], rows[keep]
-        if not len(rows):
-            continue
-        s = s.assign(_row=rows).drop_duplicates("_row", keep="last")
-        for col in cols:
-            out[col].iloc[s["_row"].values, j] = s[col].values
-        out["_since"].iloc[s["_row"].values, j] = s["_row"].values
-    for col in cols:
-        out[col] = out[col].ffill(limit=STALE_DAYS)
-    since = out["_since"].ffill(limit=STALE_DAYS)
-    out["_since"] = pd.DataFrame(np.repeat(np.arange(len(dates), dtype=float)[:, None], len(p.tickers), axis=1),
-                                 index=p.dates, columns=p.tickers) - since
+    """Eager variant kept for tests and small panels."""
+    f = _Fundamentals(p)
+    out = {c: f.get(c) for c in cols}
+    out["_since"] = f.since()
     return out
 
 
@@ -92,8 +118,9 @@ def compute(p: Panel, sink=None) -> tuple[dict[str, pd.DataFrame], pd.DataFrame,
         cols = {}
         for t, s_ in sec.items():
             cols[t] = (_ret(adj[s_], k) if isinstance(s_, str) and s_ in adj else base)
-        sec_ret = pd.DataFrame(cols, index=p.dates)[p.tickers]
-        sec_ret = sec_ret.apply(lambda c: c.fillna(base))
+        sec_ret = pd.DataFrame(cols, index=p.dates)[p.tickers].to_numpy()
+        b = base.to_numpy()[:, None]
+        sec_ret = pd.DataFrame(np.where(np.isnan(sec_ret), b, sec_ret), index=p.dates, columns=p.tickers)
         emit(f"rs_sector_{k}", rets[k] - sec_ret)
         del sec_ret, cols
     mx = r.rolling(252, min_periods=150).mean()
@@ -111,26 +138,16 @@ def compute(p: Panel, sink=None) -> tuple[dict[str, pd.DataFrame], pd.DataFrame,
     emit("max_ret_21", r.rolling(21, min_periods=15).max())
     del r
 
-    fcols = ["rev_yoy_q", "rev_yoy_ttm", "eps_yoy_q", "ni_yoy_ttm", "gross_margin", "op_margin",
-             "net_margin", "op_margin_chg", "roe", "accruals", "share_chg_yoy",
-             "revenue_ttm", "net_income_ttm", "cfo_ttm", "equity", "shares"]
-    fd = _asof_fundamentals(p, [c for c in fcols if p.snapshots is not None and c in p.snapshots])
-    empty = pd.DataFrame(np.nan, index=p.dates, columns=p.tickers)
-    for c in fcols[:11]:
-        emit(c, fd.get(c, empty))
-    shares = fd.get("shares")
-    if shares is not None:
-        mcap = (p.true_close * shares).where(lambda x: x > 0)
-        emit("ey", fd["net_income_ttm"] / mcap)
-        emit("sy", fd["revenue_ttm"] / mcap)
-        emit("by", fd["equity"] / mcap)
-        emit("cfy", fd["cfo_ttm"] / mcap)
-        emit("log_mcap", np.log(mcap))
-        del mcap
-    else:
-        for c in ("ey", "sy", "by", "cfy", "log_mcap"):
-            emit(c, empty)
-    emit("days_since_filing", fd["_since"])
+    fd = _Fundamentals(p)
+    for c in ("rev_yoy_q", "rev_yoy_ttm", "eps_yoy_q", "ni_yoy_ttm", "gross_margin", "op_margin",
+              "net_margin", "op_margin_chg", "roe", "accruals", "share_chg_yoy"):
+        emit(c, fd.get(c))
+    mcap = (p.true_close * fd.get("shares")).where(lambda x: x > 0)
+    for name, src in (("ey", "net_income_ttm"), ("sy", "revenue_ttm"), ("by", "equity"), ("cfy", "cfo_ttm")):
+        emit(name, fd.get(src) / mcap)
+    emit("log_mcap", np.log(mcap))
+    del mcap
+    emit("days_since_filing", fd.since())
     del fd
 
     elig = eligibility(p)

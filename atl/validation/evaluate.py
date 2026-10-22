@@ -57,7 +57,12 @@ def run_cv(ctx: Context, spec: dict) -> dict:
     strat = impl.build(spec)
     strat.prepare(ctx.fs, windows=ctx.test_windows, gap_extra=int(ctx.cfg["cv"]["purge_extra_days"])) \
         if spec["family"] == "ml" else strat.prepare(ctx.fs)
-    res = engine.run(ctx.fs, strat, ctx.rs, ctx.re, ctx.cfg)
+    # The baseline reference is bought at the start of the measured window. Bought in 2007 it
+    # would trip the 35% breaker in 2008 and sit in cash, and every candidate would be compared
+    # to cash. Learned candidates still run from the start of the research period, so they
+    # must survive 2008 inside the drawdown limit.
+    start = ctx.test_windows[0][0] - 1 if spec["family"] == "baseline" else ctx.rs
+    res = engine.run(ctx.fs, strat, start, ctx.re, ctx.cfg)
     m = res.slice(ctx.measure_start, ctx.fs.dates[ctx.re] + pd.Timedelta(days=1))
     spy = _spy(ctx, ctx.test_windows[0][0], ctx.re)
     summ = metrics.summarize(m.ret, spy[-len(m.ret):], m.trades, m.turnover, m.exposure, m.cost)

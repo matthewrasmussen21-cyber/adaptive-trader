@@ -52,20 +52,26 @@ def build_panel(as_of: pd.Timestamp | None = None, start: str | None = None,
     # Columns: tickers that clear the liquidity screen at least once (eligibility per day is
     # still decided point-in-time; this only keeps never-tradable names out of memory).
     u = cfg["universe"]
-    dv = (px["close"] * px["volume"]).groupby(px["ticker"]).transform(lambda s: s.rolling(20, min_periods=15).mean())
+    dv = (px["close"] * px["volume"]).groupby(px["ticker"]).rolling(20, min_periods=15).mean() \
+        .reset_index(level=0, drop=True).reindex(px.index)
     ever = px.loc[(px["close"] > u["min_price"]) & (dv > u["min_dollar_volume"]), "ticker"].unique()
     must = {"SPY", "QQQ", *cfg["data"]["sector_etfs"]}
     px = px[px["ticker"].isin(set(ever) | must)]
     ref = "SPY" if "SPY" in set(px["ticker"]) else px["ticker"].iloc[0]
     dates = pd.DatetimeIndex(sorted(px.loc[px["ticker"] == ref, "date"].unique()))
     tickers = pd.Index(sorted(set(px["ticker"]) & set(lst.index)))
-    w = {c: _wide(px, c, dates, tickers) for c in ("open", "high", "low", "close", "adj_close", "volume")}
+    w = {}
+    for c in ("open", "high", "low", "close", "adj_close", "volume"):
+        w[c] = _wide(px[["date", "ticker", c]], c, dates, tickers)
+        if c != "adj_close":
+            w[c] = w[c].astype("float32")
+    del px
 
     # Splits are NOT truncated at as_of: the stored prices are already divided by every later
     # split (that is how the source delivers them), so all of them must be undone to recover
     # the price that actually traded on each day. The result is a point-in-time quantity.
     sp = prices.load_splits()
-    factor = pd.DataFrame(1.0, index=dates, columns=tickers)
+    factor = pd.DataFrame(np.float32(1.0), index=dates, columns=tickers)
     for _, s in sp[sp["ticker"].isin(tickers)].iterrows():
         # prices before the split date were divided by `ratio` in the adjusted series
         factor.loc[factor.index < s["date"], s["ticker"]] *= float(s["ratio"])

@@ -38,7 +38,7 @@ def build() -> dict:
         elif r["type"] == "ORDER" and d["book"] == "live":
             orders.append(d)
         elif r["type"] in ("PROMOTION", "HALT", "RESUME", "CHALLENGER_ADDED", "CHALLENGER_RETIRED",
-                           "RESEARCH_RUN", "REVIEW", "SYSTEM_INIT", "HOLDOUT_ACCESS", "CONFIG"):
+                           "RESEARCH_RUN", "REVIEW", "SYSTEM_INIT", "HOLDOUT_ACCESS", "CONFIG", "CONFIG_CHANGE", "NOTE"):
             timeline.append({"seq": r["seq"], "ts": r["ts"], "type": r["type"], "data": d})
     curves = {}
     for b, rows in marks.items():

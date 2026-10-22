@@ -5,6 +5,8 @@ on:
       candidates:
         description: Number of candidates
         default: "300"
+  push:
+    paths: [".github/research.txt"]
 permissions:
   contents: write
 concurrency:
@@ -22,7 +24,7 @@ jobs:
       - run: |
           scripts/run.sh 'verify' python -m atl verify
           scripts/run.sh 'features' python -m atl features
-          scripts/run.sh 'research -n ${{ inputs.candidates }}' python -m atl research -n ${{ inputs.candidates }}
+          scripts/run.sh 'research' python -m atl research -n ${{ inputs.candidates || '300' }}
       - uses: ./.github/actions/persist
         with:
           message: "research: manual run"

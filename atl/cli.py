@@ -201,6 +201,12 @@ def cmd_verify(a) -> None:
         sys.exit(1)
 
 
+def cmd_note(a) -> None:
+    from .ledger import books
+    books.events().append("NOTE", {"text": a.text})
+    log("note appended to ledger")
+
+
 def cmd_synthetic(a) -> None:
     from .data import synthetic
     synthetic.install(n_stocks=a.n, start=a.start, signal=a.signal)
@@ -221,6 +227,7 @@ def main(argv=None) -> None:
     sp.add_parser("review").set_defaults(fn=cmd_review)
     sp.add_parser("export").set_defaults(fn=cmd_export)
     sp.add_parser("verify").set_defaults(fn=cmd_verify)
+    nt = sp.add_parser("note"); nt.add_argument("text"); nt.set_defaults(fn=cmd_note)
     s = sp.add_parser("synthetic"); s.add_argument("-n", type=int, default=300)
     s.add_argument("--start", default="2010-01-01"); s.add_argument("--signal", type=float, default=0.3)
     s.set_defaults(fn=cmd_synthetic)
