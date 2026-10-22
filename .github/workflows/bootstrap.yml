@@ -28,11 +28,18 @@ jobs:
         run: scripts/run.sh listings python -m atl data listings
       - name: Prices backfill (Yahoo, Stooq fallback)
         run: scripts/run.sh prices python -m atl data prices
+      - name: Save prices
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tar --exclude='data/features' -czf data.tar.gz data && ls -lh data.tar.gz
+          gh release view data-store >/dev/null 2>&1 || gh release create data-store --title "Market data store" --notes "Raw market data used by the workflows." --latest=false
+          gh release upload data-store data.tar.gz --clobber && rm data.tar.gz
       - name: Macro (FRED)
         run: scripts/run.sh macro python -m atl data macro
       - name: Fundamentals (SEC XBRL, point-in-time)
         run: scripts/run.sh fundamentals python -m atl data fundamentals
-      - name: Save raw data early
+      - name: Save all raw data
         env:
           GH_TOKEN: ${{ github.token }}
         run: |

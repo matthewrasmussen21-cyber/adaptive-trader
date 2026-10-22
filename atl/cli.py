@@ -61,8 +61,9 @@ def cmd_data(a) -> None:
         gaps["fundamentals_requested"] = len(ciks)
         log(f"fundamentals: {gaps['fundamentals_companies']}/{len(ciks)} companies with XBRL facts")
     if a.what in ("macro", "all"):
-        m = macro.fetch(cfg["data"]["fred_series"])
+        m, notes = macro.fetch(cfg["data"]["fred_series"], log=log)
         macro.save(m)
+        gaps["macro_sources"] = notes
         log(f"macro: {m['series'].nunique()} FRED series through {m['date'].max().date()}")
     _write_gaps(gaps)
 

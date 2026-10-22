@@ -1,1 +1,1 @@
-Bootstrap requested 2026-10-22T01:17:47Z (SEC contact)
+Bootstrap requested 2026-10-22T01:53:12Z (FRED fallback, earlier save)
