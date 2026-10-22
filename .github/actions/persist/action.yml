@@ -1,0 +1,53 @@
+name: Persist state, data and dashboard
+description: Verify the ledger, commit state/, upload market data and the dashboard to releases
+inputs:
+  message:
+    description: Commit message
+    required: true
+  save-data:
+    description: Upload the data directory to the data-store release
+    default: "true"
+runs:
+  using: composite
+  steps:
+    - name: Verify ledger and book reconciliation
+      shell: bash
+      run: python -m atl verify
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        cache: npm
+        cache-dependency-path: dashboard/package-lock.json
+    - name: Build dashboard
+      shell: bash
+      run: |
+        python -m atl export
+        cd dashboard && npm ci --no-audit --no-fund && npx vite build
+        cp dist/index.html ../dashboard.html
+    - uses: actions/upload-artifact@v4
+      with:
+        name: dashboard
+        path: dashboard.html
+        retention-days: 30
+    - name: Commit state
+      shell: bash
+      run: |
+        git config user.name "adaptive-trader[bot]"
+        git config user.email "adaptive-trader@users.noreply.github.com"
+        git add state
+        if git diff --cached --quiet; then echo "no state changes"; exit 0; fi
+        git commit -q -m "${{ inputs.message }}"
+        for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+    - name: Upload data and dashboard to releases
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        gh release view dashboard >/dev/null 2>&1 || gh release create dashboard --title "Dashboard (latest)" --notes "Download dashboard.html and open it in a browser. Rebuilt by every scheduled run." --latest=false
+        gh release upload dashboard dashboard.html --clobber
+        if [ "${{ inputs.save-data }}" = "true" ]; then
+          tar --exclude='data/features' -czf data.tar.gz data
+          ls -lh data.tar.gz
+          gh release view data-store >/dev/null 2>&1 || gh release create data-store --title "Market data store" --notes "Raw market data (prices, fundamentals, macro, listings) used by the workflows. Not for direct use." --latest=false
+          gh release upload data-store data.tar.gz --clobber
+        fi

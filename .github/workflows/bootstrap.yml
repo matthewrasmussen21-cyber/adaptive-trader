@@ -1,0 +1,52 @@
+name: Bootstrap
+# One-time: full data backfill, system init, first research run, first marks.
+# Runs on manual dispatch, or when .github/bootstrap.txt changes.
+on:
+  workflow_dispatch:
+    inputs:
+      candidates:
+        description: Candidates for the first research run
+        default: "300"
+  push:
+    paths: [".github/bootstrap.txt"]
+permissions:
+  contents: write
+concurrency:
+  group: atl-state
+  cancel-in-progress: false
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    env:
+      SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Listings (nasdaqtrader + SEC)
+        run: python -m atl data listings
+      - name: Prices backfill (Yahoo, Stooq fallback)
+        run: python -m atl data prices
+      - name: Macro (FRED)
+        run: python -m atl data macro
+      - name: Fundamentals (SEC XBRL, point-in-time)
+        run: python -m atl data fundamentals
+      - name: Save raw data early
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tar --exclude='data/features' -czf data.tar.gz data && ls -lh data.tar.gz
+          gh release view data-store >/dev/null 2>&1 || gh release create data-store --title "Market data store" --notes "Raw market data used by the workflows." --latest=false
+          gh release upload data-store data.tar.gz --clobber && rm data.tar.gz
+      - name: Feature store
+        run: python -m atl features
+      - name: Initialize system (baseline champion, locked holdout)
+        run: python -m atl bootstrap
+      - name: First research run
+        run: python -m atl research -n ${{ inputs.candidates || '300' }}
+      - name: Books
+        run: python -m atl daily
+      - uses: ./.github/actions/persist
+        with:
+          message: "bootstrap: data backfill, init, first research run"

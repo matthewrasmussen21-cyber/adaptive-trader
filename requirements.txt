@@ -1,0 +1,8 @@
+numpy>=2.0
+pandas>=2.2
+pyarrow>=16
+scipy>=1.13
+scikit-learn>=1.5
+requests>=2.31
+yfinance>=0.2.54
+pytest>=8

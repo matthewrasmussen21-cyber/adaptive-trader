@@ -1,0 +1,29 @@
+name: Research (manual)
+on:
+  workflow_dispatch:
+    inputs:
+      candidates:
+        description: Number of candidates
+        default: "300"
+permissions:
+  contents: write
+concurrency:
+  group: atl-state
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: |
+          python -m atl verify
+          python -m atl features
+          python -m atl research -n ${{ inputs.candidates }}
+      - uses: ./.github/actions/persist
+        with:
+          message: "research: manual run"
+          save-data: "false"

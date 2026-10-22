@@ -1,0 +1,37 @@
+name: Daily
+# After the US close: pull prices, rebuild features, fill yesterday's orders at today's
+# open, mark every book at today's close, decide tomorrow's orders.
+on:
+  schedule:
+    - cron: "47 22 * * 1-5"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atl-state
+  cancel-in-progress: false
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+      ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
+      ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Skip if not initialized
+        id: init
+        run: python -c "import json,sys; s=json.load(open('state/registry/system.json')); sys.exit(0 if s.get('initialized') else 1)" && echo "ok=1" >> $GITHUB_OUTPUT || echo "ok=0" >> $GITHUB_OUTPUT
+      - if: steps.init.outputs.ok == '1'
+        run: |
+          python -m atl verify
+          python -m atl data prices
+          python -m atl data macro
+          python -m atl features
+          python -m atl daily
+      - if: steps.init.outputs.ok == '1'
+        uses: ./.github/actions/persist
+        with:
+          message: "daily: books marked"

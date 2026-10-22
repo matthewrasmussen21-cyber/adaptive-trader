@@ -1,0 +1,16 @@
+name: CI
+on:
+  push:
+    paths: ["atl/**", "tests/**", "config/**", "requirements.txt"]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          restore-data: "false"
+      - name: Tests (synthetic market; leakage, accounting, ledger, gate)
+        run: python -m pytest -q -W ignore

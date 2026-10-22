@@ -1,0 +1,32 @@
+name: Monthly
+# Refresh listings, run the review agent, then a research run informed by its findings.
+on:
+  schedule:
+    - cron: "17 15 1 * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atl-state
+  cancel-in-progress: false
+jobs:
+  monthly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: |
+          python -m atl verify
+          python -m atl data listings
+          python -m atl data prices
+          python -m atl data macro
+          python -m atl features
+          python -m atl review
+          python -m atl research --after-review
+      - uses: ./.github/actions/persist
+        with:
+          message: "monthly: review + research"

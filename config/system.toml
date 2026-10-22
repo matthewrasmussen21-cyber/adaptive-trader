@@ -1,0 +1,64 @@
+# Adaptive Trader — system configuration.
+# Every value here is a constraint or an engineering choice, not a trading idea.
+# Changing anything in [objective], [gate] or [holdout] is logged as a CONFIG_CHANGE
+# event by `atl verify-config` so the track record shows when the rules moved.
+
+[objective]
+target = "oos_cagr"            # maximize out-of-sample CAGR
+max_drawdown = 0.35            # hard peak-to-trough limit (breaker -> cash, re-validation required)
+starting_capital = 100000.0
+long_only = true
+leverage = 1.0                 # gross exposure cap
+min_holding_days = 2
+max_holding_days = 252
+
+[universe]
+min_price = 5.0
+min_dollar_volume = 10_000_000 # 20-day average, USD
+rebuild = "monthly"
+include_etfs = true
+exclude_leveraged_etfs = true  # leveraged/inverse ETFs embed leverage, which the objective forbids
+
+[data]
+start = "2006-01-01"           # gives a 2007 feature start: GFC, 2011, 2015-16, 2018, 2020, 2022 regimes
+warmup_days = 260
+benchmarks = ["SPY", "QQQ"]
+sector_etfs = ["XLK", "XLF", "XLV", "XLY", "XLP", "XLE", "XLI", "XLB", "XLU", "XLRE", "XLC"]
+fred_series = ["VIXCLS", "T10Y2Y", "BAMLH0A0HYM2", "DGS10", "DTB3"]
+
+[costs]
+slippage_bps_per_side = 10.0
+# Half-spread estimate (no free historical quote data): 1 + 50/sqrt(ADV in $M) bps, clipped to [1, 25].
+spread_base_bps = 1.0
+spread_scale_bps = 50.0
+spread_cap_bps = 25.0
+
+[holdout]
+# Locked window = the 2 years before system init. Research never sees it.
+# Each candidate may touch it once, at promotion time. Every touch is logged.
+years = 2
+init_date = "2026-10-22"            # first live trading day: decided at the 10-21 close, filled at the 10-22 open
+
+[cv]
+folds = 5                      # contiguous time folds over the research period
+first_test_fold = 2            # fold 1 is training-only for learned models; metrics use folds 2..K for every candidate
+purge_extra_days = 5           # gap = label horizon + this embargo before each test fold
+
+[gate]
+min_oos_trades = 100
+dsr_threshold = 0.95           # deflated Sharpe probability on returns in excess of the champion
+min_regimes = 3                # must beat the champion in >= 3 of 4 market regimes
+min_regime_days = 120
+min_shadow_days = 42           # live shadow evidence before promotion (~2 months)
+shadow_z_floor = -2.0          # live mean return may not sit > 2 SE below backtest expectation
+
+[research]
+candidates_per_run = 300
+ml_fraction = 0.10
+elite_fraction = 0.15          # share of each run spent mutating the best prior candidates
+max_challengers = 3
+llm_proposals = 20             # used only when ANTHROPIC_API_KEY is set
+llm_model = "claude-sonnet-5-5"
+
+[review]
+decay_percentile = 0.05        # flag a book whose live result is below the 5th pct of its backtest distribution

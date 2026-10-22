@@ -1,0 +1,31 @@
+name: Setup Adaptive Trader
+description: Python, dependencies, and the persisted market data restored from the data-store release
+inputs:
+  restore-data:
+    description: Download the data-store release asset
+    default: "true"
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+        cache: pip
+    - name: Install dependencies
+      shell: bash
+      run: pip install -r requirements.txt
+    - name: Restore market data
+      if: inputs.restore-data == 'true'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        mkdir -p data
+        if gh release view data-store >/dev/null 2>&1; then
+          gh release download data-store -p data.tar.gz -D . --clobber
+          tar -xzf data.tar.gz
+          rm data.tar.gz
+          du -sh data
+        else
+          echo "No data-store release yet (first run)."
+        fi

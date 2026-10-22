@@ -1,0 +1,28 @@
+name: Weekly
+# Refresh SEC fundamentals, evaluate shadow challengers, promote when the full gate is met.
+on:
+  schedule:
+    - cron: "23 14 * * 6"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: atl-state
+  cancel-in-progress: false
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: |
+          python -m atl verify
+          python -m atl data fundamentals
+          python -m atl features
+          python -m atl weekly
+      - uses: ./.github/actions/persist
+        with:
+          message: "weekly: shadow evaluation"
