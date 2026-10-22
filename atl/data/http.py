@@ -21,6 +21,9 @@ def sec_user_agent() -> str:
 def get(url: str, *, headers: dict | None = None, min_interval: float = 0.0,
         retries: int = 4, timeout: float = 30.0) -> requests.Response:
     host = url.split("/")[2]
+    last = "no response"
+    if "sec.gov" in host:
+        headers = {"Accept-Encoding": "gzip, deflate", **(headers or {})}
     for attempt in range(retries):
         wait = _LAST.get(host, 0.0) + min_interval - time.monotonic()
         if wait > 0:
@@ -30,11 +33,12 @@ def get(url: str, *, headers: dict | None = None, min_interval: float = 0.0,
             r = _SESSION.get(url, headers=headers or {}, timeout=timeout)
             if r.status_code == 200:
                 return r
+            last = f"HTTP {r.status_code}: {r.text[:300]!r}"
             if r.status_code == 404:
                 r.raise_for_status()
         except requests.HTTPError:
             raise
-        except requests.RequestException:
-            pass
+        except requests.RequestException as e:
+            last = repr(e)[:300]
         time.sleep(2 ** attempt)
-    raise RuntimeError(f"GET failed after {retries} attempts: {url}")
+    raise RuntimeError(f"GET failed after {retries} attempts: {url} -> {last}")

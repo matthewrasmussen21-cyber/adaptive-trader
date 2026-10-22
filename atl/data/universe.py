@@ -25,7 +25,7 @@ SEC_TICKERS = "https://www.sec.gov/files/company_tickers_exchange.json"
 SEC_SUBMISSIONS = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
 
 _NON_COMMON = re.compile(
-    r"\b(warrants?|rights?|units?|preferred|pfd|notes? due|debentures?|"
+    r"\b(?:warrants?|rights?|units?|preferred|pfd|notes? due|debentures?|"
     r"subordinated|trust preferred|when issued|contingent value)\b|%", re.I)
 _LEVERAGED = re.compile(
     r"(\b[23]x\b|-[23]x\b|\bultra|\bleveraged\b|\binverse\b|\bbear\b|"
