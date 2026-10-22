@@ -25,6 +25,8 @@ warmup_days = 260
 benchmarks = ["SPY", "QQQ"]
 sector_etfs = ["XLK", "XLF", "XLV", "XLY", "XLP", "XLE", "XLI", "XLB", "XLU", "XLRE", "XLC"]
 fred_series = ["VIXCLS", "T10Y2Y", "BAMLH0A0HYM2", "DGS10", "DTB3"]
+# SEC EDGAR requires a real contact in every request's User-Agent (env SEC_USER_AGENT overrides)
+sec_user_agent = "AdaptiveTrader matthew.rasmussen21@gmail.com"
 
 [costs]
 slippage_bps_per_side = 10.0

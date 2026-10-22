@@ -82,7 +82,7 @@ All optional:
 
 | Name | Kind | Effect |
 |---|---|---|
-| `SEC_USER_AGENT` | repository variable | contact string SEC asks for, e.g. `Your Name you@example.com` (defaults to the repo owner's GitHub noreply address) |
+| `SEC_USER_AGENT` | repository variable | overrides the SEC contact string set in `config/system.toml` |
 | `ANTHROPIC_API_KEY` | secret | enables LLM-proposed candidates and the review narrative |
 | `ALPACA_API_KEY_ID`, `ALPACA_API_SECRET_KEY` | secrets | also mirrors the live book's orders to an Alpaca paper account as market-on-open orders. The internal broker remains the system of record |
 

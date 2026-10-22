@@ -14,6 +14,10 @@ def sec_user_agent() -> str:
     ua = os.environ.get("SEC_USER_AGENT")
     if ua:
         return ua
+    from ..config import config
+    ua = config()["data"].get("sec_user_agent")
+    if ua:
+        return ua
     owner = os.environ.get("GITHUB_REPOSITORY_OWNER", "adaptive-trader")
     return f"AdaptiveTrader {owner}@users.noreply.github.com"
 
