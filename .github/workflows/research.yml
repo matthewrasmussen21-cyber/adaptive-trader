@@ -20,9 +20,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
       - run: |
-          python -m atl verify
-          python -m atl features
-          python -m atl research -n ${{ inputs.candidates }}
+          scripts/run.sh 'verify' python -m atl verify
+          scripts/run.sh 'features' python -m atl features
+          scripts/run.sh 'research -n ${{ inputs.candidates }}' python -m atl research -n ${{ inputs.candidates }}
       - uses: ./.github/actions/persist
         with:
           message: "research: manual run"

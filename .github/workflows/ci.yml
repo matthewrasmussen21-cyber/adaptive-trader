@@ -13,4 +13,4 @@ jobs:
         with:
           restore-data: "false"
       - name: Tests (synthetic market; leakage, accounting, ledger, gate)
-        run: python -m pytest -q -W ignore
+        run: scripts/run.sh pytest python -m pytest -q -W ignore --tb=short

@@ -26,11 +26,11 @@ jobs:
         run: python -c "import json,sys; s=json.load(open('state/registry/system.json')); sys.exit(0 if s.get('initialized') else 1)" && echo "ok=1" >> $GITHUB_OUTPUT || echo "ok=0" >> $GITHUB_OUTPUT
       - if: steps.init.outputs.ok == '1'
         run: |
-          python -m atl verify
-          python -m atl data prices
-          python -m atl data macro
-          python -m atl features
-          python -m atl daily
+          scripts/run.sh 'verify' python -m atl verify
+          scripts/run.sh 'data prices' python -m atl data prices
+          scripts/run.sh 'data macro' python -m atl data macro
+          scripts/run.sh 'features' python -m atl features
+          scripts/run.sh 'daily' python -m atl daily
       - if: steps.init.outputs.ok == '1'
         uses: ./.github/actions/persist
         with:

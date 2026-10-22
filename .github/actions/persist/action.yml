@@ -12,7 +12,7 @@ runs:
   steps:
     - name: Verify ledger and book reconciliation
       shell: bash
-      run: python -m atl verify
+      run: scripts/run.sh verify python -m atl verify
     - uses: actions/setup-node@v4
       with:
         node-version: "22"
@@ -21,7 +21,7 @@ runs:
     - name: Build dashboard
       shell: bash
       run: |
-        python -m atl export
+        scripts/run.sh export python -m atl export
         cd dashboard && npm ci --no-audit --no-fund && npx vite build
         cp dist/index.html ../dashboard.html
     - uses: actions/upload-artifact@v4
