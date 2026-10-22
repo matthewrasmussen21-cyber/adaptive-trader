@@ -15,7 +15,7 @@ def sec_user_agent() -> str:
     if ua:
         return ua
     owner = os.environ.get("GITHUB_REPOSITORY_OWNER", "adaptive-trader")
-    return f"adaptive-trader research bot {owner}@users.noreply.github.com"
+    return f"AdaptiveTrader {owner}@users.noreply.github.com"
 
 
 def get(url: str, *, headers: dict | None = None, min_interval: float = 0.0,
