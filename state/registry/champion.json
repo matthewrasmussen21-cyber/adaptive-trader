@@ -1,0 +1,9 @@
+{
+  "model_id": "M0000",
+  "since": "2026-10-22",
+  "spec": {
+    "family": "baseline",
+    "hypothesis": "Buy and hold the market. Every learned strategy must beat this.",
+    "ticker": "SPY"
+  }
+}

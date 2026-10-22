@@ -1,0 +1,197 @@
+{
+  "spec_hash": "8466840b7e4d72c1",
+  "label": "-1.00\u00b7prod(ret_63,vol_21) | top 14, every 34d",
+  "spec": {
+    "family": "rank",
+    "terms": [
+      {
+        "feature": "prod(ret_63,vol_21)",
+        "weight": -1.0
+      }
+    ],
+    "nan_policy": "exclude",
+    "n_positions": 14,
+    "rebalance_days": 34,
+    "weighting": "inv_vol",
+    "max_weight": 0.35,
+    "hold_buffer": 2.94,
+    "prefilter": null,
+    "regime": null,
+    "origin": "random"
+  },
+  "hypothesis": "Exploratory: tests whether [-1.00\u00b7prod(ret_63,vol_21) | top 14, every 34d] earns excess return over the champion out of sample, within the drawdown limit.",
+  "champion_at_test": {
+    "hash": "10e02f30b332e129",
+    "label": "hold SPY",
+    "cv": {
+      "days": 3577,
+      "cagr": 0.0,
+      "vol": 0.0,
+      "sharpe": 0.0,
+      "sortino": 0.0,
+      "max_drawdown": -0.0,
+      "calmar": null,
+      "skew": 0.0,
+      "kurtosis": 3.0,
+      "alpha": 0.0,
+      "beta": 0.0,
+      "bench_cagr": 0.143677,
+      "trades": 0,
+      "win_rate": null,
+      "avg_win": null,
+      "avg_loss": null,
+      "avg_hold_days": null,
+      "turnover_annual": 0.0,
+      "exposure": 0.0,
+      "cost_annual": 0.0,
+      "halted_in_backtest": true
+    },
+    "holdout": {
+      "days": 501,
+      "cagr": 0.167122,
+      "vol": 0.165278,
+      "sharpe": 1.017168,
+      "sortino": 1.523172,
+      "max_drawdown": 0.187552,
+      "calmar": 0.891071,
+      "skew": 1.199642,
+      "kurtosis": 26.173657,
+      "alpha": 0.001674,
+      "beta": 0.999926,
+      "bench_cagr": 0.165187,
+      "trades": 1,
+      "win_rate": 1.0,
+      "avg_win": 0.36121,
+      "avg_loss": null,
+      "avg_hold_days": null,
+      "turnover_annual": 0.251212,
+      "exposure": 0.999999,
+      "cost_annual": 0.000569
+    }
+  },
+  "cv": {
+    "metrics": {
+      "days": 3577,
+      "cagr": 0.016476,
+      "vol": 0.011012,
+      "sharpe": 1.48956,
+      "sortino": 2.005674,
+      "max_drawdown": 0.038659,
+      "calmar": 0.426193,
+      "skew": -2.609129,
+      "kurtosis": 46.83673,
+      "alpha": 0.015421,
+      "beta": 0.006607,
+      "bench_cagr": 0.143677,
+      "trades": 186,
+      "win_rate": 0.569892,
+      "avg_win": 0.182553,
+      "avg_loss": -0.219895,
+      "avg_hold_days": 113.137931,
+      "turnover_annual": 0.500639,
+      "exposure": 1.0,
+      "cost_annual": 0.002014,
+      "halted_in_backtest": false
+    },
+    "folds": [
+      {
+        "start": "2010-08-05",
+        "end": "2014-02-24",
+        "cagr": 0.015577891851651593,
+        "max_drawdown": 0.02414373740611575
+      },
+      {
+        "start": "2014-02-25",
+        "end": "2017-09-11",
+        "cagr": 0.010137158263365809,
+        "max_drawdown": 0.008463957265013478
+      },
+      {
+        "start": "2017-09-12",
+        "end": "2021-03-31",
+        "cagr": 0.016160039042467433,
+        "max_drawdown": 0.038658723893466584
+      },
+      {
+        "start": "2021-04-01",
+        "end": "2024-10-21",
+        "cagr": 0.02406934226172308,
+        "max_drawdown": 0.0222588589655357
+      }
+    ]
+  },
+  "gate_cv": {
+    "passed": true,
+    "checks": {
+      "beats_champion_cagr": true,
+      "drawdown_within_limit": true,
+      "min_trades": true,
+      "deflated_sharpe": true,
+      "regime_stability": true
+    },
+    "dsr": {
+      "sr_daily": 0.09383344879644431,
+      "sr0_daily": 0.048049332740512096,
+      "n_trials": 280,
+      "var_sr": 0.0002795638803466592,
+      "var_trials": 0.0003052485819810423,
+      "dsr": 0.9908658099792496
+    },
+    "regimes": {
+      "up_calm": {
+        "days": 2108,
+        "ann_excess": 0.016753316961986533,
+        "counted": true
+      },
+      "up_volatile": {
+        "days": 788,
+        "ann_excess": 0.016937607859962976,
+        "counted": true
+      },
+      "down_calm": {
+        "days": 106,
+        "ann_excess": 0.04953234182170303,
+        "counted": false
+      },
+      "down_volatile": {
+        "days": 575,
+        "ann_excess": 0.008279059827354794,
+        "counted": true
+      }
+    },
+    "regime_wins": 3,
+    "active_sr_daily": 0.09383344879644431
+  },
+  "holdout": {
+    "days": 501,
+    "cagr": 0.038627,
+    "vol": 0.002251,
+    "sharpe": 16.838058,
+    "sortino": 30.831321,
+    "max_drawdown": 0.001596,
+    "calmar": 24.198508,
+    "skew": -3.475075,
+    "kurtosis": 49.502903,
+    "alpha": 0.037851,
+    "beta": 0.000322,
+    "bench_cagr": 0.165187,
+    "trades": 36,
+    "win_rate": 0.527778,
+    "avg_win": 0.087655,
+    "avg_loss": -0.43087,
+    "avg_hold_days": 40.181818,
+    "turnover_annual": 0.549177,
+    "exposure": 1.0,
+    "cost_annual": 0.001975
+  },
+  "gate_holdout": {
+    "passed": false,
+    "checks": {
+      "beats_champion_cagr": false,
+      "drawdown_within_limit": true
+    },
+    "cand_cagr": 0.038627,
+    "champ_cagr": 0.167122
+  },
+  "generated_at": "2026-10-22T03:22:38.381694+00:00"
+}
