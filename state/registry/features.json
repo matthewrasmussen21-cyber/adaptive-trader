@@ -66,5 +66,5 @@
     "prod": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks",
     "neg": "-a"
   },
-  "code_version": "3bc5455abb46"
+  "code_version": "5c4d7ad26703"
 }

@@ -1,0 +1,16 @@
+{
+  "run_id": "R20261022-033742",
+  "seed": 1792640262,
+  "note": "",
+  "tested": 300,
+  "errors": 0,
+  "cv_passed": 0,
+  "holdout_touched": 0,
+  "new_challengers": [],
+  "challengers": [],
+  "total_trials": 600,
+  "champion": "10e02f30b332e129",
+  "champion_cv_cagr": 0.1441,
+  "best_cv": 0.161274,
+  "seconds": 661.7
+}
