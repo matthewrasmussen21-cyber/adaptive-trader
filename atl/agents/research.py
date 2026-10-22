@@ -83,6 +83,7 @@ def champion_context(ctx) -> dict:
     spec = ch["spec"]
     h = spec_hash(spec)
     cv = ev.run_cv(ctx, spec)
+    ev.save_series(h, cv=cv)        # the dashboard and the review agent read the champion's CV series
     ho = ev.run_holdout(ctx, spec)  # cached after the first touch
     return {"spec": spec, "hash": h, "cv": cv, "holdout": ho, "model_id": ch.get("model_id")}
 
@@ -218,6 +219,7 @@ def run(n: int | None = None, seed: int | None = None, note: str = "", log=print
                "champion_cv_cagr": champ["cv"]["metrics"]["cagr"],
                "best_cv": max((score(r) for r in history() if r.get("run_id") == run_id), default=None),
                "seconds": round(time.time() - t0, 1)}
+    state.set_feature_stats(feature_stats(history()))   # include this run's evidence
     books.events().append("RESEARCH_RUN", summary)
     rep = paths().reports / "research"
     rep.mkdir(parents=True, exist_ok=True)
