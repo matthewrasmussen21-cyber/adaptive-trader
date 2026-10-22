@@ -1,5 +1,6 @@
 name: Weekly
-# Refresh SEC fundamentals, evaluate shadow challengers, promote when the full gate is met.
+# Refresh SEC fundamentals, evaluate shadow challengers, promote when the full gate is met,
+# then run a research pass so the search keeps moving between monthly reviews.
 on:
   schedule:
     - cron: "23 14 * * 6"
@@ -12,9 +13,10 @@ concurrency:
 jobs:
   weekly:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 240
     env:
       SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -23,6 +25,7 @@ jobs:
           scripts/run.sh 'data fundamentals' python -m atl data fundamentals
           scripts/run.sh 'features' python -m atl features
           scripts/run.sh 'weekly' python -m atl weekly
+          scripts/run.sh 'research' python -m atl research -n 300
       - uses: ./.github/actions/persist
         with:
-          message: "weekly: shadow evaluation"
+          message: "weekly: shadow evaluation + research"

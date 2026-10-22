@@ -9,7 +9,7 @@ An autonomous, self-improving US equity research system that paper trades and ke
 ## How it learns
 
 ```
-            ┌────────────── Research agent (monthly + on demand) ───────────────┐
+            ┌────────────── Research agent (weekly + monthly) ──────────────────┐
  random ──┐ │                                                                   │
  mutation ├─► candidate spec ─► walk-forward CV ─► gate ─► locked holdout ─► shadow challenger
  LLM*  ───┘ │  (logged, even      (folds 2..K,     5 checks   (one touch per      (≥ 42 live days,
@@ -69,7 +69,7 @@ Local build: `python -m atl export && cd dashboard && npm ci && npx vite build` 
 |---|---|---|
 | `bootstrap` | once (push to `.github/bootstrap.txt` or manual) | full backfill, init, first research run, first marks |
 | `daily` | 22:47 Mon–Fri | prices + macro, features, fills/marks/orders for every book |
-| `weekly` | Sat 14:23 | SEC fundamentals refresh, shadow evaluation, promotions |
+| `weekly` | Sat 14:23 | SEC fundamentals refresh, shadow evaluation, promotions, 300-candidate research run |
 | `monthly` | 1st, 15:17 | listings refresh, review agent, research run |
 | `research` | manual | extra research run |
 | `CI` | on push | test suite on a synthetic market with a planted signal |
