@@ -121,8 +121,25 @@ def download(tickers: list[str], start: str, chunk: int = 80, use_fallback: bool
     return df, sp, missing
 
 
+def _norm_dates(df: pd.DataFrame) -> pd.DataFrame:
+    """One date representation everywhere: tz-naive, midnight, datetime64[ns].
+    Sources sometimes return exchange-local tz-aware timestamps or strings."""
+    if df.empty:
+        return df
+    d = df["date"]
+    if not pd.api.types.is_datetime64_any_dtype(d):
+        d = pd.to_datetime(d, utc=False, errors="coerce")
+    if getattr(d.dt, "tz", None) is not None:
+        d = d.dt.tz_localize(None)          # keep the exchange-local calendar date
+    df = df.copy()
+    df["date"] = d.dt.normalize().astype("datetime64[ns]")
+    df["ticker"] = df["ticker"].astype(str)
+    return df.dropna(subset=["date"])
+
+
 def merge(old: pd.DataFrame, new: pd.DataFrame) -> pd.DataFrame:
     """Append new bars, rescaling stored history when the source re-adjusted it."""
+    old, new = _norm_dates(old), _norm_dates(new)
     if old.empty:
         return new[COLS].sort_values(["ticker", "date"]).reset_index(drop=True)
     if new.empty:

@@ -72,3 +72,16 @@ def test_ytd_cash_flow_is_differenced_into_quarters(market):
     y = ytd[ytd["end"].dt.year == 2016].sort_values("end")
     q2 = q[q["end"] == y["end"].iloc[1]]["value"].iloc[0]
     assert np.isclose(q2, y["value"].iloc[1] - y["value"].iloc[0])
+
+
+def test_merge_accepts_tz_aware_and_string_dates():
+    d = pd.bdate_range("2024-01-01", periods=6)
+    old = _bars("A", d[:4], np.array([10.0, 11, 12, 13]), 1e6)
+    old["date"] = old["date"].astype("datetime64[ms]")
+    new = _bars("A", d[3:], np.array([13.0, 14, 15]), 1e6)
+    new["date"] = new["date"].dt.tz_localize("America/New_York")
+    m = prices.merge(old, new)
+    assert len(m) == 6 and m["date"].dt.tz is None and m["date"].is_monotonic_increasing
+    new2 = _bars("A", d[3:], np.array([13.0, 14, 15]), 1e6)
+    new2["date"] = new2["date"].dt.strftime("%Y-%m-%d")
+    assert len(prices.merge(old, new2)) == 6

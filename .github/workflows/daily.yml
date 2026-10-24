@@ -5,6 +5,8 @@ on:
   schedule:
     - cron: "47 22 * * 1-5"
   workflow_dispatch:
+  push:
+    paths: [".github/daily.txt"]
 permissions:
   contents: write
 concurrency:
