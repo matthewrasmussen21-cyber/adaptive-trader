@@ -1,0 +1,50 @@
+name: Alerts
+# Opens a GitHub issue (which GitHub emails to the repo owner) when a scheduled workflow
+# fails, adds a comment if it keeps failing, and closes the issue when the next run succeeds.
+on:
+  workflow_run:
+    workflows: ["Daily", "Weekly", "Monthly", "Research (manual)", "Bootstrap", "Alert test"]
+    types: [completed]
+permissions:
+  issues: write
+  actions: read
+  checks: read
+jobs:
+  alert:
+    if: github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'success' || github.event.workflow_run.conclusion == 'timed_out'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      WF: ${{ github.event.workflow_run.name }}
+      CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+      RUN_URL: ${{ github.event.workflow_run.html_url }}
+      RUN_ID: ${{ github.event.workflow_run.id }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - name: Open, update or close the alert issue
+        run: |
+          title="Run failed: ${WF}"
+          gh label create alert --color B60205 --description "Automated run failure" 2>/dev/null || true
+          existing=$(gh issue list --label alert --state open --search "in:title \"${title}\"" --json number,title \
+                     --jq ".[] | select(.title == \"${title}\") | .number" | head -1)
+          if [ "$CONCLUSION" = "success" ]; then
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" --comment "Recovered: [this run](${RUN_URL}) succeeded."
+            fi
+            exit 0
+          fi
+          # Collect the error annotations of the failed job(s)
+          details=""
+          for jid in $(gh api "repos/${GH_REPO}/actions/runs/${RUN_ID}/jobs" --jq '.jobs[] | select(.conclusion=="failure" or .conclusion=="timed_out") | .id'); do
+            step=$(gh api "repos/${GH_REPO}/actions/jobs/${jid}" --jq '[.steps[] | select(.conclusion=="failure")][0].name // "unknown step"')
+            ann=$(gh api "repos/${GH_REPO}/check-runs/${jid}/annotations" --jq '[.[] | select(.annotation_level=="failure") | .message] | join("\n\n")' | tail -c 3500)
+            details="${details}**Failed step:** ${step}"$'\n\n```\n'"${ann}"$'\n```\n'
+          done
+          stamp=$(date -u +"%Y-%m-%d %H:%M UTC")
+          body="@${OWNER} the **${WF}** workflow ended with \`${CONCLUSION}\` at ${stamp}."$'\n\n'"[Open the run](${RUN_URL})"$'\n\n'"${details}"$'\n'"Nothing in the ledger is written by a failed run; the next successful daily run catches up missed days in order. This issue closes itself when ${WF} next succeeds."
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "$title" --label alert --body "$body"
+          fi
