@@ -76,6 +76,8 @@ Local build: `python -m atl export && cd dashboard && npm ci && npx vite build` 
 
 Market data (~hundreds of MB) lives in the `data-store` release, not in git.
 
+**Failure alerts:** when a scheduled workflow fails, the `Alerts` workflow opens an issue labeled `alert` that @-mentions the repo owner (GitHub emails it), comments on it if failures repeat, and closes it when the workflow next succeeds.
+
 ## Configuration and secrets
 
 All optional:

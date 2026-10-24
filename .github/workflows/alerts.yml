@@ -3,7 +3,7 @@ name: Alerts
 # fails, adds a comment if it keeps failing, and closes the issue when the next run succeeds.
 on:
   workflow_run:
-    workflows: ["Daily", "Weekly", "Monthly", "Research (manual)", "Bootstrap", "Alert test"]
+    workflows: ["Daily", "Weekly", "Monthly", "Research (manual)", "Bootstrap"]
     types: [completed]
 permissions:
   issues: write
