@@ -1,1 +1,303 @@
-{}
+{
+  "accruals": {
+    "in_top_decile": 0,
+    "lift": 0.311,
+    "status": "neutral",
+    "used": 5,
+    "weight": 0.311
+  },
+  "beta_252": {
+    "in_top_decile": 0,
+    "lift": 0.311,
+    "status": "neutral",
+    "used": 5,
+    "weight": 0.311
+  },
+  "by": {
+    "in_top_decile": 2,
+    "lift": 1.095,
+    "status": "neutral",
+    "used": 17,
+    "weight": 1.095
+  },
+  "cfy": {
+    "in_top_decile": 0,
+    "lift": 0.274,
+    "status": "neutral",
+    "used": 6,
+    "weight": 0.3
+  },
+  "days_since_filing": {
+    "in_top_decile": 1,
+    "lift": 0.718,
+    "status": "neutral",
+    "used": 14,
+    "weight": 0.718
+  },
+  "dist_high_252": {
+    "in_top_decile": 1,
+    "lift": 1.608,
+    "status": "favored",
+    "used": 5,
+    "weight": 1.608
+  },
+  "dist_high_63": {
+    "in_top_decile": 0,
+    "lift": 0.124,
+    "status": "neutral",
+    "used": 16,
+    "weight": 0.3
+  },
+  "dist_low_252": {
+    "in_top_decile": 0,
+    "lift": 0.43,
+    "status": "neutral",
+    "used": 3,
+    "weight": 0.43
+  },
+  "dist_low_63": {
+    "in_top_decile": 0,
+    "lift": 0.184,
+    "status": "neutral",
+    "used": 10,
+    "weight": 0.3
+  },
+  "dvol_21": {
+    "in_top_decile": 0,
+    "lift": 0.531,
+    "status": "neutral",
+    "used": 2,
+    "weight": 0.531
+  },
+  "eps_yoy_q": {
+    "in_top_decile": 0,
+    "lift": 0.124,
+    "status": "neutral",
+    "used": 16,
+    "weight": 0.3
+  },
+  "ey": {
+    "in_top_decile": 0,
+    "lift": 0.22,
+    "status": "neutral",
+    "used": 8,
+    "weight": 0.3
+  },
+  "gap_1": {
+    "in_top_decile": 0,
+    "lift": 0.274,
+    "status": "neutral",
+    "used": 6,
+    "weight": 0.3
+  },
+  "gross_margin": {
+    "in_top_decile": 11,
+    "lift": 2.766,
+    "status": "favored",
+    "used": 36,
+    "weight": 2.766
+  },
+  "idio_vol_63": {
+    "in_top_decile": 0,
+    "lift": 0.244,
+    "status": "neutral",
+    "used": 7,
+    "weight": 0.3
+  },
+  "log_mcap": {
+    "in_top_decile": 6,
+    "lift": 1.666,
+    "status": "favored",
+    "used": 33,
+    "weight": 1.666
+  },
+  "max_ret_21": {
+    "in_top_decile": 0,
+    "lift": 0.244,
+    "status": "neutral",
+    "used": 7,
+    "weight": 0.3
+  },
+  "net_margin": {
+    "in_top_decile": 3,
+    "lift": 2.14,
+    "status": "favored",
+    "used": 12,
+    "weight": 2.14
+  },
+  "ni_yoy_ttm": {
+    "in_top_decile": 0,
+    "lift": 0.311,
+    "status": "neutral",
+    "used": 5,
+    "weight": 0.311
+  },
+  "op_margin": {
+    "in_top_decile": 3,
+    "lift": 1.768,
+    "status": "favored",
+    "used": 15,
+    "weight": 1.768
+  },
+  "op_margin_chg": {
+    "in_top_decile": 1,
+    "lift": 0.428,
+    "status": "neutral",
+    "used": 25,
+    "weight": 0.428
+  },
+  "range_21": {
+    "in_top_decile": 4,
+    "lift": 1.717,
+    "status": "favored",
+    "used": 21,
+    "weight": 1.717
+  },
+  "ret_126": {
+    "in_top_decile": 0,
+    "lift": 0.693,
+    "status": "neutral",
+    "used": 1,
+    "weight": 0.693
+  },
+  "ret_21": {
+    "in_top_decile": 0,
+    "lift": 0.693,
+    "status": "neutral",
+    "used": 1,
+    "weight": 0.693
+  },
+  "ret_252": {
+    "in_top_decile": 0,
+    "lift": 0.531,
+    "status": "neutral",
+    "used": 2,
+    "weight": 0.531
+  },
+  "ret_5": {
+    "in_top_decile": 0,
+    "lift": 0.361,
+    "status": "neutral",
+    "used": 4,
+    "weight": 0.361
+  },
+  "ret_63": {
+    "in_top_decile": 1,
+    "lift": 1.608,
+    "status": "favored",
+    "used": 5,
+    "weight": 1.608
+  },
+  "rev_yoy_q": {
+    "in_top_decile": 1,
+    "lift": 0.952,
+    "status": "neutral",
+    "used": 10,
+    "weight": 0.952
+  },
+  "rev_yoy_ttm": {
+    "in_top_decile": 0,
+    "lift": 0.274,
+    "status": "neutral",
+    "used": 6,
+    "weight": 0.3
+  },
+  "roe": {
+    "in_top_decile": 0,
+    "lift": 0.311,
+    "status": "neutral",
+    "used": 5,
+    "weight": 0.311
+  },
+  "rs_sector_21": {
+    "in_top_decile": 0,
+    "lift": 0.148,
+    "status": "neutral",
+    "used": 13,
+    "weight": 0.3
+  },
+  "rs_sector_63": {
+    "in_top_decile": 0,
+    "lift": 0.43,
+    "status": "neutral",
+    "used": 3,
+    "weight": 0.43
+  },
+  "rs_spy_126": {
+    "in_top_decile": 1,
+    "lift": 1.608,
+    "status": "favored",
+    "used": 5,
+    "weight": 1.608
+  },
+  "rs_spy_63": {
+    "in_top_decile": 0,
+    "lift": 0.311,
+    "status": "neutral",
+    "used": 5,
+    "weight": 0.311
+  },
+  "share_chg_yoy": {
+    "in_top_decile": 0,
+    "lift": 1.0,
+    "status": "neutral",
+    "used": 0,
+    "weight": 1.0
+  },
+  "skew_63": {
+    "in_top_decile": 1,
+    "lift": 1.608,
+    "status": "favored",
+    "used": 5,
+    "weight": 1.608
+  },
+  "sy": {
+    "in_top_decile": 1,
+    "lift": 1.865,
+    "status": "favored",
+    "used": 4,
+    "weight": 1.865
+  },
+  "up_frac_21": {
+    "in_top_decile": 1,
+    "lift": 0.576,
+    "status": "neutral",
+    "used": 18,
+    "weight": 0.576
+  },
+  "vol_21": {
+    "in_top_decile": 0,
+    "lift": 0.139,
+    "status": "neutral",
+    "used": 14,
+    "weight": 0.3
+  },
+  "vol_63": {
+    "in_top_decile": 3,
+    "lift": 1.119,
+    "status": "neutral",
+    "used": 25,
+    "weight": 1.119
+  },
+  "vol_ratio": {
+    "in_top_decile": 1,
+    "lift": 0.952,
+    "status": "neutral",
+    "used": 10,
+    "weight": 0.952
+  },
+  "volu_chg_21_126": {
+    "in_top_decile": 0,
+    "lift": 0.274,
+    "status": "neutral",
+    "used": 6,
+    "weight": 0.3
+  },
+  "volu_chg_5_63": {
+    "in_top_decile": 1,
+    "lift": 0.677,
+    "status": "neutral",
+    "used": 15,
+    "weight": 0.677
+  }
+}
