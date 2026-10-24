@@ -1,0 +1,30 @@
+{
+  "book_id": "live",
+  "capital": 100000.0,
+  "cash": 0.12729145667981356,
+  "entry_date": {
+    "SPY": "2026-10-22"
+  },
+  "equity": 99053.1370212623,
+  "growth": {
+    "SPY": 0.9916489104610372
+  },
+  "halted": false,
+  "kind": "live",
+  "label": "hold SPY",
+  "last_date": "2026-10-23",
+  "last_rebalance_date": "2026-10-21",
+  "peak": 100000.0,
+  "pending": null,
+  "regime_on": null,
+  "spec": {
+    "family": "baseline",
+    "hypothesis": "Buy and hold the market. Every learned strategy must beat this.",
+    "ticker": "SPY"
+  },
+  "spec_hash": "10e02f30b332e129",
+  "start_date": "2026-10-22",
+  "values": {
+    "SPY": 99053.00972980562
+  }
+}

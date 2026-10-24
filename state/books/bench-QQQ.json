@@ -1,0 +1,20 @@
+{
+  "book_id": "bench-QQQ",
+  "capital": 100000.0,
+  "cash": 97131.82743479729,
+  "entry_date": {},
+  "equity": 97131.82743479729,
+  "growth": {},
+  "halted": false,
+  "kind": "bench",
+  "label": "bench-QQQ",
+  "last_date": "2026-10-23",
+  "last_rebalance_date": null,
+  "peak": 100000.0,
+  "pending": null,
+  "regime_on": null,
+  "spec": null,
+  "spec_hash": null,
+  "start_date": "2026-10-22",
+  "values": {}
+}
