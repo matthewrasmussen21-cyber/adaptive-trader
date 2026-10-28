@@ -7,21 +7,19 @@
     "Historical index membership, short interest, analyst estimates, options data and intraday prices are not available from free sources and are not used.",
     "Cash earns 0% in the paper book (conservative versus a money-market sweep)."
   ],
-  "updated_at": "2026-10-27T01:56:22.383523+00:00",
+  "updated_at": "2026-10-28T02:05:09.268474+00:00",
   "prices_missing": [
     "",
     "EQH-A",
     "MER-K",
     "MET-E",
     "MS-F",
-    "MSGK#",
-    "MSGR#",
     "SCE-L",
     "STT-G",
     "TFC-I"
   ],
-  "prices_missing_count": 10,
-  "illiquid_skipped": 3632,
+  "prices_missing_count": 8,
+  "illiquid_skipped": 3633,
   "macro_sources": {
     "VIXCLS": "Yahoo ^VIX close (same index)",
     "T10Y2Y": "SUBSTITUTE: 10y minus 3-month yield (no free 2y series on Yahoo)",
