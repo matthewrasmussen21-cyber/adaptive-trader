@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-30",
+  "regime_now": "up_calm",
+  "books": {
+    "live": {
+      "label": "hold SPY",
+      "spec_hash": "10e02f30b332e129",
+      "live_days": 6,
+      "live_cagr": -0.3658506324795746,
+      "live_max_drawdown": 0.021481020107725457,
+      "bt_cagr": 0.1441004719775869,
+      "bt_max_drawdown": 0.33717239143658817,
+      "live_vs_backtest_percentile": 0.192
+    }
+  },
+  "findings": [],
+  "total_trials": 1200,
+  "challengers": [],
+  "champion": "M0000",
+  "research_note": "no anomalies",
+  "narrative": null
+}
