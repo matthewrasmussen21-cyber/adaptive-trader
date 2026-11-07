@@ -1,303 +1,303 @@
 {
   "accruals": {
     "in_top_decile": 0,
-    "lift": 0.37,
+    "lift": 0.392,
     "status": "neutral",
-    "used": 8,
-    "weight": 0.37
+    "used": 9,
+    "weight": 0.392
   },
   "beta_252": {
     "in_top_decile": 0,
-    "lift": 0.439,
+    "lift": 0.453,
     "status": "neutral",
-    "used": 6,
-    "weight": 0.439
+    "used": 7,
+    "weight": 0.453
   },
   "by": {
-    "in_top_decile": 5,
-    "lift": 1.336,
+    "in_top_decile": 2,
+    "lift": 0.603,
     "status": "neutral",
-    "used": 34,
-    "weight": 1.336
+    "used": 37,
+    "weight": 0.603
   },
   "cfy": {
     "in_top_decile": 0,
-    "lift": 0.343,
+    "lift": 0.345,
     "status": "neutral",
-    "used": 9,
-    "weight": 0.343
+    "used": 11,
+    "weight": 0.345
   },
   "days_since_filing": {
-    "in_top_decile": 2,
-    "lift": 0.88,
+    "in_top_decile": 1,
+    "lift": 0.513,
     "status": "neutral",
-    "used": 22,
-    "weight": 0.88
+    "used": 25,
+    "weight": 0.513
   },
   "dist_high_252": {
     "in_top_decile": 0,
-    "lift": 0.217,
+    "lift": 0.234,
     "status": "neutral",
-    "used": 17,
+    "used": 19,
     "weight": 0.3
   },
   "dist_high_63": {
     "in_top_decile": 0,
-    "lift": 0.183,
+    "lift": 0.209,
     "status": "neutral",
-    "used": 21,
+    "used": 22,
     "weight": 0.3
   },
   "dist_low_252": {
     "in_top_decile": 1,
-    "lift": 0.797,
+    "lift": 0.725,
     "status": "neutral",
-    "used": 13,
-    "weight": 0.797
+    "used": 16,
+    "weight": 0.725
   },
   "dist_low_63": {
     "in_top_decile": 0,
-    "lift": 0.299,
+    "lift": 0.293,
     "status": "neutral",
-    "used": 11,
+    "used": 14,
     "weight": 0.3
   },
   "dvol_21": {
     "in_top_decile": 0,
-    "lift": 0.402,
+    "lift": 0.42,
     "status": "neutral",
-    "used": 7,
-    "weight": 0.402
+    "used": 8,
+    "weight": 0.42
   },
   "eps_yoy_q": {
     "in_top_decile": 0,
-    "lift": 0.217,
+    "lift": 0.244,
     "status": "neutral",
-    "used": 17,
+    "used": 18,
     "weight": 0.3
   },
   "ey": {
     "in_top_decile": 0,
-    "lift": 0.266,
+    "lift": 0.293,
     "status": "neutral",
-    "used": 13,
+    "used": 14,
     "weight": 0.3
   },
   "gap_1": {
     "in_top_decile": 0,
-    "lift": 0.37,
+    "lift": 0.42,
     "status": "neutral",
     "used": 8,
-    "weight": 0.37
+    "weight": 0.42
   },
   "gross_margin": {
-    "in_top_decile": 22,
-    "lift": 1.844,
+    "in_top_decile": 26,
+    "lift": 1.811,
     "status": "favored",
-    "used": 110,
-    "weight": 1.844
+    "used": 141,
+    "weight": 1.811
   },
   "idio_vol_63": {
     "in_top_decile": 0,
-    "lift": 0.239,
+    "lift": 0.266,
     "status": "neutral",
-    "used": 15,
+    "used": 16,
     "weight": 0.3
   },
   "log_mcap": {
-    "in_top_decile": 20,
-    "lift": 2.079,
+    "in_top_decile": 23,
+    "lift": 1.817,
     "status": "favored",
-    "used": 88,
-    "weight": 2.079
+    "used": 124,
+    "weight": 1.817
   },
   "max_ret_21": {
     "in_top_decile": 0,
-    "lift": 0.37,
+    "lift": 0.367,
     "status": "neutral",
-    "used": 8,
-    "weight": 0.37
+    "used": 10,
+    "weight": 0.367
   },
   "net_margin": {
     "in_top_decile": 3,
-    "lift": 1.072,
+    "lift": 1.029,
     "status": "neutral",
-    "used": 26,
-    "weight": 1.072
+    "used": 29,
+    "weight": 1.029
   },
   "ni_yoy_ttm": {
     "in_top_decile": 1,
-    "lift": 1.029,
+    "lift": 0.888,
     "status": "neutral",
-    "used": 9,
-    "weight": 1.029
+    "used": 12,
+    "weight": 0.888
   },
   "op_margin": {
-    "in_top_decile": 5,
-    "lift": 1.24,
+    "in_top_decile": 6,
+    "lift": 1.246,
     "status": "neutral",
-    "used": 37,
-    "weight": 1.24
+    "used": 47,
+    "weight": 1.246
   },
   "op_margin_chg": {
     "in_top_decile": 0,
-    "lift": 0.135,
+    "lift": 0.162,
     "status": "discarded",
     "used": 30,
     "weight": 0.3
   },
   "range_21": {
-    "in_top_decile": 15,
-    "lift": 1.805,
+    "in_top_decile": 19,
+    "lift": 1.767,
     "status": "favored",
-    "used": 76,
-    "weight": 1.805
+    "used": 105,
+    "weight": 1.767
   },
   "ret_126": {
     "in_top_decile": 0,
-    "lift": 0.343,
+    "lift": 0.345,
     "status": "neutral",
-    "used": 9,
-    "weight": 0.343
+    "used": 11,
+    "weight": 0.345
   },
   "ret_21": {
     "in_top_decile": 0,
-    "lift": 0.54,
+    "lift": 0.492,
     "status": "neutral",
-    "used": 4,
-    "weight": 0.54
+    "used": 6,
+    "weight": 0.492
   },
   "ret_252": {
     "in_top_decile": 0,
-    "lift": 0.485,
+    "lift": 0.537,
     "status": "neutral",
     "used": 5,
-    "weight": 0.485
+    "weight": 0.537
   },
   "ret_5": {
     "in_top_decile": 0,
-    "lift": 0.402,
+    "lift": 0.453,
     "status": "neutral",
     "used": 7,
-    "weight": 0.402
+    "weight": 0.453
   },
   "ret_63": {
-    "in_top_decile": 5,
-    "lift": 2.278,
-    "status": "favored",
-    "used": 18,
-    "weight": 2.278
+    "in_top_decile": 2,
+    "lift": 0.838,
+    "status": "neutral",
+    "used": 25,
+    "weight": 0.838
   },
   "rev_yoy_q": {
-    "in_top_decile": 2,
-    "lift": 1.193,
+    "in_top_decile": 1,
+    "lift": 0.725,
     "status": "neutral",
-    "used": 15,
-    "weight": 1.193
+    "used": 16,
+    "weight": 0.725
   },
   "rev_yoy_ttm": {
     "in_top_decile": 0,
-    "lift": 0.402,
+    "lift": 0.453,
     "status": "neutral",
     "used": 7,
-    "weight": 0.402
+    "weight": 0.453
   },
   "roe": {
-    "in_top_decile": 1,
-    "lift": 1.11,
+    "in_top_decile": 2,
+    "lift": 1.183,
     "status": "neutral",
-    "used": 8,
-    "weight": 1.11
+    "used": 16,
+    "weight": 1.183
   },
   "rs_sector_21": {
     "in_top_decile": 1,
-    "lift": 0.571,
+    "lift": 0.549,
     "status": "neutral",
-    "used": 20,
-    "weight": 0.571
+    "used": 23,
+    "weight": 0.549
   },
   "rs_sector_63": {
     "in_top_decile": 1,
-    "lift": 1.11,
+    "lift": 1.068,
     "status": "neutral",
-    "used": 8,
-    "weight": 1.11
+    "used": 9,
+    "weight": 1.068
   },
   "rs_spy_126": {
     "in_top_decile": 0,
-    "lift": 0.217,
+    "lift": 0.234,
     "status": "neutral",
-    "used": 17,
+    "used": 19,
     "weight": 0.3
   },
   "rs_spy_63": {
     "in_top_decile": 0,
-    "lift": 0.402,
+    "lift": 0.392,
     "status": "neutral",
-    "used": 7,
-    "weight": 0.402
+    "used": 9,
+    "weight": 0.392
   },
   "share_chg_yoy": {
     "in_top_decile": 0,
-    "lift": 0.61,
+    "lift": 0.537,
     "status": "neutral",
-    "used": 3,
-    "weight": 0.61
+    "used": 5,
+    "weight": 0.537
   },
   "skew_63": {
-    "in_top_decile": 2,
-    "lift": 0.914,
+    "in_top_decile": 3,
+    "lift": 1.201,
     "status": "neutral",
-    "used": 21,
-    "weight": 0.914
+    "used": 24,
+    "weight": 1.201
   },
   "sy": {
     "in_top_decile": 1,
-    "lift": 0.797,
+    "lift": 0.84,
     "status": "neutral",
     "used": 13,
-    "weight": 0.797
+    "weight": 0.84
   },
   "up_frac_21": {
     "in_top_decile": 0,
-    "lift": 0.164,
+    "lift": 0.195,
     "status": "neutral",
     "used": 24,
     "weight": 0.3
   },
   "vol_21": {
     "in_top_decile": 0,
-    "lift": 0.207,
+    "lift": 0.216,
     "status": "neutral",
-    "used": 18,
+    "used": 21,
     "weight": 0.3
   },
   "vol_63": {
-    "in_top_decile": 1,
-    "lift": 0.249,
+    "in_top_decile": 2,
+    "lift": 0.439,
     "status": "neutral",
-    "used": 52,
-    "weight": 0.3
+    "used": 53,
+    "weight": 0.439
   },
   "vol_ratio": {
-    "in_top_decile": 1,
-    "lift": 0.509,
+    "in_top_decile": 2,
+    "lift": 0.866,
     "status": "neutral",
-    "used": 23,
-    "weight": 0.509
+    "used": 24,
+    "weight": 0.866
   },
   "volu_chg_21_126": {
     "in_top_decile": 0,
-    "lift": 0.32,
+    "lift": 0.367,
     "status": "neutral",
     "used": 10,
-    "weight": 0.32
+    "weight": 0.367
   },
   "volu_chg_5_63": {
     "in_top_decile": 0,
-    "lift": 0.158,
+    "lift": 0.182,
     "status": "neutral",
-    "used": 25,
+    "used": 26,
     "weight": 0.3
   }
 }
