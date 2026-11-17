@@ -5,14 +5,14 @@
   "entry_date": {
     "SPY": "2026-10-22"
   },
-  "equity": 98323.24732052482,
+  "equity": 96443.77472123037,
   "growth": {
-    "SPY": 0.984341769280094
+    "SPY": 0.9655258144654377
   },
   "halted": false,
   "kind": "live",
   "label": "hold SPY",
-  "last_date": "2026-11-13",
+  "last_date": "2026-11-16",
   "last_rebalance_date": "2026-10-21",
   "peak": 100661.51218920635,
   "pending": null,
@@ -25,6 +25,6 @@
   "spec_hash": "10e02f30b332e129",
   "start_date": "2026-10-22",
   "values": {
-    "SPY": 98323.12002906814
+    "SPY": 96443.64742977369
   }
 }
