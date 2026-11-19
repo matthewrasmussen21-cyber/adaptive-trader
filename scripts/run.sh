@@ -4,8 +4,10 @@
 set -o pipefail
 title="$1"; shift
 log=$(mktemp)
+t0=$(date +%s)
 "$@" 2>&1 | tee "$log"
 code=${PIPESTATUS[0]}
+echo "::notice title=${title} took $(( $(date +%s) - t0 ))s::$(tail -n 3 "$log" | tr '\n' ' ' | cut -c1-300)"
 if [ "$code" -ne 0 ]; then
   tail -n 60 "$log" | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' > "$log.tail"
   echo "::error title=${title} failed (exit ${code})::$(cat "$log.tail")"

@@ -16,7 +16,7 @@ concurrency:
 jobs:
   daily:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     env:
       SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
       ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
@@ -35,8 +35,17 @@ jobs:
           scripts/run.sh 'data macro' python -m atl data macro
           scripts/run.sh 'features' python -m atl features
           scripts/run.sh 'daily' python -m atl daily
-          scripts/run.sh 'research' python -m atl research -n 300
+      # Save the day's marks before research, so a slow or failed research pass can never
+      # cost the track record a day.
       - if: steps.init.outputs.ok == '1'
         uses: ./.github/actions/persist
         with:
-          message: "daily: books marked + research"
+          message: "daily: books marked"
+      - if: steps.init.outputs.ok == '1'
+        name: Research pass
+        run: scripts/run.sh 'research' python -m atl research -n 300
+      - if: steps.init.outputs.ok == '1'
+        uses: ./.github/actions/persist
+        with:
+          message: "daily: research"
+          save-data: "false"
