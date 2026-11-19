@@ -4,9 +4,21 @@ inputs:
   restore-data:
     description: Download the data-store release asset
     default: "true"
+  sync-state:
+    description: Move to the latest main before working (state-writing workflows)
+    default: "true"
 runs:
   using: composite
   steps:
+    - name: Sync to latest main
+      # A queued run checks out the commit that triggered it, which can be older than the
+      # state another run has since committed. Working from stale state forks the ledger.
+      if: inputs.sync-state == 'true'
+      shell: bash
+      run: |
+        git fetch -q origin "${{ github.event.repository.default_branch }}"
+        git checkout -q -B "${{ github.event.repository.default_branch }}" "origin/${{ github.event.repository.default_branch }}"
+        git log --oneline -1
     - uses: actions/setup-python@v5
       with:
         python-version: "3.13"

@@ -12,5 +12,6 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           restore-data: "false"
+          sync-state: "false"
       - name: Tests (synthetic market; leakage, accounting, ledger, gate)
         run: scripts/run.sh pytest python -m pytest -q -W ignore --tb=short
