@@ -75,7 +75,6 @@ Local build: `python -m atl export && cd dashboard && npm ci && npx vite build` 
 | `monthly` | 1st, 15:17 | listings refresh, review agent, research run |
 | `research` | manual | extra research run |
 | `report` | after `weekly` (Saturdays) | emails the owner a weekly report: performance, trades, research progress, challengers, events, run health |
-| `report` | after `weekly` (Saturdays) | emails the owner a weekly report: performance, trades, research progress, challengers, events, run health |
 | `CI` | on push | test suite on a synthetic market with a planted signal |
 
 Market data (~hundreds of MB) lives in the `data-store` release, not in git.
