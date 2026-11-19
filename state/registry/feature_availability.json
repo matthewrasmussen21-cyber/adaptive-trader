@@ -59,9 +59,8 @@
     "yc_10y2y": 1.0
   },
   "unavailable": [
-    "gross_margin",
     "hy_chg_63",
     "hy_spread"
   ],
-  "rule": "market series < 50% coverage or cross-sectional feature < 20% of eligible cells, research period"
+  "rule": "market series < 50% coverage or cross-sectional feature < 2% of eligible cells, research period"
 }

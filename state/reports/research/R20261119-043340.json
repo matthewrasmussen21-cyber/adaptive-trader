@@ -1,0 +1,58 @@
+{
+  "run_id": "R20261119-043340",
+  "seed": 1795062820,
+  "note": "",
+  "tested": 300,
+  "errors": 0,
+  "cv_passed": 0,
+  "holdout_touched": 0,
+  "new_challengers": [],
+  "challengers": [],
+  "total_trials": 2700,
+  "champion": "10e02f30b332e129",
+  "champion_cv_cagr": 0.1441,
+  "best_cv": 0.191087,
+  "learning": {
+    "exploit_fraction": 0.6,
+    "learned_param_share": 0.5,
+    "proposed_by_origin": {
+      "mutation": 58,
+      "random": 127,
+      "crossover": 45,
+      "repair": 70
+    },
+    "by_origin": {
+      "mutation": {
+        "tested": 58,
+        "best_fitness": 0.9074,
+        "best_dsr": 0.1078,
+        "beat_champion_in_dd": 30
+      },
+      "random": {
+        "tested": 127,
+        "best_fitness": 0.1815,
+        "best_dsr": 0.0006,
+        "beat_champion_in_dd": 1
+      },
+      "crossover": {
+        "tested": 45,
+        "best_fitness": 0.7925,
+        "best_dsr": 0.0479,
+        "beat_champion_in_dd": 27
+      },
+      "repair": {
+        "tested": 70,
+        "best_fitness": 0.8402,
+        "best_dsr": 0.1184,
+        "beat_champion_in_dd": 47
+      }
+    },
+    "best_fitness": 0.9074,
+    "best_dsr": 0.1184,
+    "unavailable_inputs": [
+      "hy_chg_63",
+      "hy_spread"
+    ]
+  },
+  "seconds": 380.5
+}
