@@ -201,6 +201,15 @@ def cmd_verify(a) -> None:
         sys.exit(1)
 
 
+def cmd_report(a) -> None:
+    from .export import report
+    md = report.build(days=a.days)
+    if a.out:
+        open(a.out, "w").write(md)
+    else:
+        print(md)
+
+
 def cmd_note(a) -> None:
     from .ledger import books
     books.events().append("NOTE", {"text": a.text})
@@ -227,6 +236,8 @@ def main(argv=None) -> None:
     sp.add_parser("review").set_defaults(fn=cmd_review)
     sp.add_parser("export").set_defaults(fn=cmd_export)
     sp.add_parser("verify").set_defaults(fn=cmd_verify)
+    rp = sp.add_parser("report"); rp.add_argument("--days", type=int, default=7); rp.add_argument("--out")
+    rp.set_defaults(fn=cmd_report)
     nt = sp.add_parser("note"); nt.add_argument("text"); nt.set_defaults(fn=cmd_note)
     s = sp.add_parser("synthetic"); s.add_argument("-n", type=int, default=300)
     s.add_argument("--start", default="2010-01-01"); s.add_argument("--signal", type=float, default=0.3)

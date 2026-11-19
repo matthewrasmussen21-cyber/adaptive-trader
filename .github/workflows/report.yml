@@ -1,0 +1,56 @@
+name: Weekly report
+# Emails the owner a weekly summary after the Saturday weekly run: performance, trades,
+# research progress, challengers, events and run health. Delivered as a comment on one
+# "weekly reports" issue that @-mentions the owner, which GitHub emails.
+on:
+  workflow_run:
+    workflows: ["Weekly"]
+    types: [completed]
+  workflow_dispatch:
+  push:
+    paths: [".github/report.txt"]
+permissions:
+  contents: read
+  issues: write
+  actions: read
+concurrency:
+  group: atl-report
+  cancel-in-progress: false
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      OWNER: ${{ github.repository_owner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          restore-data: "false"
+      - name: Build report
+        run: |
+          scripts/run.sh report python -m atl report --days 7 --out report.md
+          since=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          {
+            echo ""
+            echo "**Scheduled runs this week:** $(gh api "repos/${GH_REPO}/actions/runs?per_page=100&created=>${since}" \
+              --jq '[.workflow_runs[] | select(.name=="Daily" or .name=="Weekly" or .name=="Monthly" or .name=="Research (manual)")]
+                    | group_by(.name) | map("\(.[0].name) \(map(select(.conclusion=="success")) | length)/\(length) succeeded") | join(", ")')."
+            echo "**Open failure alerts:** $(gh issue list --label alert --state open --json number --jq 'length')."
+            echo ""
+            echo "[Download the dashboard](https://github.com/${GH_REPO}/releases/tag/dashboard) · [Ledger](https://github.com/${GH_REPO}/blob/main/state/ledger/events.jsonl) · [Repository](https://github.com/${GH_REPO})"
+          } >> report.md
+      - name: Send
+        run: |
+          gh label create weekly-report --color 0E8A16 --description "Weekly status report" 2>/dev/null || true
+          title="Adaptive Trader weekly reports"
+          issue=$(gh issue list --label weekly-report --state open --json number,title \
+                  --jq ".[] | select(.title == \"${title}\") | .number" | head -1)
+          { echo "@${OWNER}"; echo ""; cat report.md; } > body.md
+          if [ -n "$issue" ]; then
+            gh issue comment "$issue" --body-file body.md
+          else
+            gh issue create --title "$title" --label weekly-report --body-file body.md
+          fi
