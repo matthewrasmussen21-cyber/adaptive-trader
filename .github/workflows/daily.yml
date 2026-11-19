@@ -1,6 +1,7 @@
 name: Daily
 # After the US close: pull prices, rebuild features, fill yesterday's orders at today's
-# open, mark every book at today's close, decide tomorrow's orders.
+# open, mark every book at today's close, decide tomorrow's orders, then a 300-candidate
+# research pass (books are marked first, so research can never delay the record).
 on:
   schedule:
     - cron: "47 22 * * 1-5"
@@ -20,6 +21,7 @@ jobs:
       SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
       ALPACA_API_KEY_ID: ${{ secrets.ALPACA_API_KEY_ID }}
       ALPACA_API_SECRET_KEY: ${{ secrets.ALPACA_API_SECRET_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
@@ -33,7 +35,8 @@ jobs:
           scripts/run.sh 'data macro' python -m atl data macro
           scripts/run.sh 'features' python -m atl features
           scripts/run.sh 'daily' python -m atl daily
+          scripts/run.sh 'research' python -m atl research -n 300
       - if: steps.init.outputs.ok == '1'
         uses: ./.github/actions/persist
         with:
-          message: "daily: books marked"
+          message: "daily: books marked + research"

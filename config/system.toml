@@ -57,7 +57,11 @@ shadow_z_floor = -2.0          # live mean return may not sit > 2 SE below backt
 [research]
 candidates_per_run = 300
 ml_fraction = 0.10
-elite_fraction = 0.15          # share of each run spent mutating the best prior candidates
+elite_fraction = 0.15          # starting share of each run spent refining the fittest prior candidates
+max_exploit_fraction = 0.6     # refinement share grows with evidence up to this (explore early, refine later)
+# Runs whose candidates were compared against a broken reference (the 2007-bought SPY baseline
+# that sat in cash after 2008). They still count as trials; they carry no learning signal.
+exclude_from_learning = ["R20261022-031116"]
 max_challengers = 3
 llm_proposals = 20             # used only when ANTHROPIC_API_KEY is set
 llm_model = "claude-sonnet-5-5"

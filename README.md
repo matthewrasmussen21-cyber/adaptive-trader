@@ -36,6 +36,8 @@ An autonomous, self-improving US equity research system that paper trades and ke
 | Holdout | the 2 years before init, never seen by research; each spec may touch it once (logged); must beat the champion's holdout CAGR within the drawdown limit. Near-duplicates (CV return correlation > 0.9 with a spec that already touched it) are refused a look |
 | Shadow | ≥ 42 live paper days, live mean return not more than 2 standard errors below backtest expectation, no drawdown breach |
 
+**Trial and error:** the generator learns from every logged candidate. Fitness is progress toward the gate (excess Sharpe vs the champion, regimes won, checks failed), not raw CAGR. The fittest candidates (at most 3 per signal set, so refinement can't collapse onto one idea) are refined by mutation, crossover, and *repair*: a targeted change aimed at the specific check a candidate failed. Portfolio settings are sampled partly from what the fittest candidates use, and the share of each run spent refining grows from 15% to 60% as evidence accumulates. Equivalent specs (e.g. `+1.00·roe` and `+0.62·roe`) are recognized and tested once. Inputs with no data over the research period are excluded (`state/registry/feature_availability.json`).
+
 **Feature learning:** sampling weights over features are updated from the candidate log — features over-represented among the top decile of out-of-sample results get sampled more; features never there decay toward a floor (never zero). Constructed features (`diff`, `ratio`, `prod`, `neg`) are documented in `state/registry/constructed_features.jsonl` when first created.
 
 **What the review agent can't do:** edit the live champion. Its only outputs are a report and a note to the next research run. All changes go through the gate. No rule is changed to fit recent losses.
@@ -68,7 +70,7 @@ Local build: `python -m atl export && cd dashboard && npm ci && npx vite build` 
 | Workflow | When (UTC) | Does |
 |---|---|---|
 | `bootstrap` | once (push to `.github/bootstrap.txt` or manual) | full backfill, init, first research run, first marks |
-| `daily` | 22:47 Mon–Fri | prices + macro, features, fills/marks/orders for every book |
+| `daily` | 22:47 Mon–Fri | prices + macro, features, fills/marks/orders for every book, then a 300-candidate research pass |
 | `weekly` | Sat 14:23 | SEC fundamentals refresh, shadow evaluation, promotions, 300-candidate research run |
 | `monthly` | 1st, 15:17 | listings refresh, review agent, research run |
 | `research` | manual | extra research run |

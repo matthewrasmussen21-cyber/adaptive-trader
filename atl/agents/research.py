@@ -14,7 +14,7 @@ from ..config import config, paths
 from ..features import registry
 from ..features import store as fstore
 from ..ledger import books
-from ..strategies.spec import features_used, label, spec_hash
+from ..strategies.spec import behavior_key, features_used, label, spec_hash
 from ..validation import evaluate as ev
 from . import generator
 
@@ -26,6 +26,7 @@ def history() -> list[dict]:
 
 
 def score(rec: dict) -> float:
+    """Out-of-sample CAGR within the drawdown limit (reporting only)."""
     m = rec.get("cv") or {}
     g = rec.get("gate_cv", {}).get("checks", {})
     if not g.get("drawdown_within_limit") or m.get("cagr") is None:
@@ -33,15 +34,41 @@ def score(rec: dict) -> float:
     return float(m["cagr"])
 
 
-def feature_stats(hist: list[dict]) -> dict:
-    """Lift of each base feature among the top decile of valid candidates."""
-    valid = [h for h in hist if score(h) > -1]
+def _excluded_runs() -> set[str]:
+    return set(config()["research"].get("exclude_from_learning", []))
+
+
+def fitness(rec: dict) -> float:
+    """What the learner optimizes: progress toward passing the gate, not raw CAGR.
+
+    The checks that bind are the deflated Sharpe of returns in excess of the champion and
+    regime stability, so fitness is the annualized excess Sharpe, plus credit for regimes
+    won, minus penalties for each other failed check. Records from runs excluded in config
+    (compared against a broken reference) carry no learning signal."""
+    g = rec.get("gate_cv") or {}
+    ch = g.get("checks") or {}
+    if not ch or rec.get("run_id") in _excluded_runs():
+        return -9.0
+    if not ch.get("drawdown_within_limit"):
+        return -5.0 + float(g.get("active_sr_daily", 0.0)) * np.sqrt(252)
+    f = float(g.get("active_sr_daily", 0.0)) * np.sqrt(252) + 0.1 * int(g.get("regime_wins", 0))
+    f -= 0.3 * (not ch.get("beats_champion_cagr")) + 0.3 * (not ch.get("min_trades"))
+    return float(f)
+
+
+def feature_stats(hist: list[dict], unavailable: set[str] | None = None) -> dict:
+    """Lift of each base feature among the fittest decile of candidates."""
+    valid = [h for h in hist if fitness(h) > -9]
     if len(valid) < 30:
         return {}
-    cut = np.quantile([score(h) for h in valid], 0.9)
-    top = [h for h in valid if score(h) >= cut]
+    cut = np.quantile([fitness(h) for h in valid], 0.9)
+    top = [h for h in valid if fitness(h) >= cut]
     out = {}
     for f in registry.XS:
+        if f in (unavailable or ()):
+            out[f] = {"used": 0, "in_top_decile": 0, "lift": None, "weight": 0.0, "status": "unavailable"}
+            continue
+
         def uses(h):
             return any(f == x or f in (registry.parse(x) or ("", []))[1] for x in h.get("features", []))
         n_all = sum(uses(h) for h in valid)
@@ -56,11 +83,59 @@ def feature_stats(hist: list[dict]) -> dict:
     return out
 
 
+def _signal_family(spec: dict) -> str:
+    if spec.get("family") == "rank":
+        return "rank:" + ",".join(sorted(t["feature"] for t in spec["terms"]))
+    if spec.get("family") == "ml":
+        return "ml"
+    return spec.get("family", "?")
+
+
+def select_elites(hist: list[dict], k: int = 30, per_family: int = 3) -> list[dict]:
+    """Fittest candidates, at most `per_family` per signal set, so refinement does not
+    collapse onto a single idea."""
+    out, fam = [], {}
+    for h in sorted((h for h in hist if fitness(h) > -5), key=fitness, reverse=True):
+        f = _signal_family(h["spec"])
+        if fam.get(f, 0) >= per_family:
+            continue
+        fam[f] = fam.get(f, 0) + 1
+        out.append(h)
+        if len(out) >= k:
+            break
+    return out
+
+
+def availability(fs, ctx, log=print) -> tuple[set[str], dict]:
+    """Inputs with too little data over the research period are unavailable: candidates may
+    not use them (a filter on an empty series never switches; an empty signal ranks nothing)."""
+    rows = np.arange(ctx.rs, ctx.re + 1, 5)
+    cov = {}
+    for f in registry.MKT:
+        v = fs.mkt[f].to_numpy()[rows] if f in fs.mkt else np.array([np.nan])
+        cov[f] = float(np.isfinite(v).mean())
+    el = np.asarray(fs.elig[rows])
+    denom = max(int(el.sum()), 1)
+    for f in registry.XS:
+        x = np.asarray(fs.x(f)[rows])
+        cov[f] = float((np.isfinite(x) & el).sum() / denom)
+    dead = {f for f, c in cov.items() if c < (0.5 if f in registry.MKT else 0.2)}
+    rep = {"coverage": {k: round(v, 4) for k, v in sorted(cov.items())}, "unavailable": sorted(dead),
+           "rule": "market series < 50% coverage or cross-sectional feature < 20% of eligible cells, research period"}
+    (paths().registry / "feature_availability.json").write_text(json.dumps(rep, indent=2))
+    if dead:
+        log(f"unavailable inputs (excluded from new candidates): {', '.join(sorted(dead))}")
+    return dead, rep
+
+
 def _hypothesis(spec: dict) -> str:
     if spec.get("hypothesis"):
         return spec["hypothesis"]
     origin = spec.get("origin", "random")
-    pre = "Mutation of a prior leader" if origin == "mutation" else "Exploratory"
+    pre = {"mutation": f"Mutation of {spec.get('parent')}",
+           "crossover": f"Crossover of {spec.get('parent')} and {spec.get('parent2')}",
+           "repair": f"Repair of {spec.get('parent')} aimed at its failed check '{spec.get('repair_target')}'",
+           "llm": "LLM proposal"}.get(origin, "Exploratory")
     return (f"{pre}: tests whether [{label(spec)}] earns excess return over the champion out of sample, "
             f"within the drawdown limit.")
 
@@ -129,20 +204,29 @@ def run(n: int | None = None, seed: int | None = None, note: str = "", log=print
     ctx = ev.context(fs, cfg)
     champ = champion_context(ctx)
     hist = history()
-    seen = {h["spec_hash"] for h in hist}
+    unavailable, _ = availability(fs, ctx, log)
+    seen = {behavior_key(h["spec"], unavailable) for h in hist if h.get("spec")}
     trial_srs = [h["gate_cv"]["active_sr_daily"] for h in hist if h.get("gate_cv")]
-    fstats = feature_stats(hist)
+    fstats = feature_stats(hist, unavailable)
     state.set_feature_stats(fstats)
-    elites = [h["spec"] for h in sorted(hist, key=score, reverse=True)[:20] if score(h) > -1]
-    gen = generator.Generator(rng, {k: v["weight"] for k, v in fstats.items()}, cfg)
+    learnable = [h for h in hist if fitness(h) > -9]
+    n_valid = len(learnable)
+    exploit = float(np.clip(float(rc["elite_fraction"]) + n_valid / 4000, float(rc["elite_fraction"]),
+                            float(rc.get("max_exploit_fraction", 0.6))))
+    p_learned = float(np.clip(n_valid / 2000, 0.0, 0.5))
+    elites = select_elites(hist)
+    pool = [h["spec"] for h in sorted(learnable, key=fitness, reverse=True)[:max(10, n_valid // 10)]]
+    gen = generator.Generator(rng, {k: v["weight"] for k, v in fstats.items() if v.get("weight")}, cfg,
+                              unavailable=unavailable, param_pool=pool, p_learned=p_learned)
     leaderboard = [{"label": h["label"], "spec": h["spec"], "cv": {k: h["cv"].get(k) for k in
-                    ("cagr", "max_drawdown", "sharpe", "trades")}} for h in sorted(hist, key=score, reverse=True)[:12]]
+                    ("cagr", "max_drawdown", "sharpe", "trades")},
+                    "failed_checks": [k for k, v in h["gate_cv"]["checks"].items() if not v]} for h in elites[:12]]
     props = generator.llm_proposals(int(rc["llm_proposals"]), leaderboard, fstats,
                                     {"label": label(champ["spec"]), "cv": champ["cv"]["metrics"]},
-                                    len(hist), rc["llm_model"], log=log)
-    props = [p for p in props if spec_hash(p) not in seen]
-    seen |= {spec_hash(p) for p in props}
-    props += gen.propose(n - len(props), elites, float(rc["ml_fraction"]), float(rc["elite_fraction"]), seen)
+                                    len(hist), rc["llm_model"], log=log, unavailable=unavailable)
+    props = [p for p in props if behavior_key(p, unavailable) not in seen]
+    seen |= {behavior_key(p, unavailable) for p in props}
+    props += gen.propose(n - len(props), elites, float(rc["ml_fraction"]), exploit, seen)
     log(f"research {run_id}: champion [{label(champ['spec'])}] CV CAGR {champ['cv']['metrics']['cagr']}; "
         f"{len(props)} candidates, {len(hist)} prior trials")
 
@@ -218,8 +302,9 @@ def run(n: int | None = None, seed: int | None = None, note: str = "", log=print
                "total_trials": len(hist) + tested, "champion": champ["hash"],
                "champion_cv_cagr": champ["cv"]["metrics"]["cagr"],
                "best_cv": max((score(r) for r in history() if r.get("run_id") == run_id), default=None),
+               "learning": _learning_summary(run_id, exploit, p_learned, gen.counts, unavailable),
                "seconds": round(time.time() - t0, 1)}
-    state.set_feature_stats(feature_stats(history()))   # include this run's evidence
+    state.set_feature_stats(feature_stats(history(), unavailable))   # include this run's evidence
     books.events().append("RESEARCH_RUN", summary)
     rep = paths().reports / "research"
     rep.mkdir(parents=True, exist_ok=True)
@@ -230,6 +315,26 @@ def run(n: int | None = None, seed: int | None = None, note: str = "", log=print
 
 
 DUP_CORR = 0.9
+
+
+def _learning_summary(run_id: str, exploit: float, p_learned: float, counts: dict, unavailable: set) -> dict:
+    recs = [r for r in history() if r.get("run_id") == run_id and r.get("gate_cv")]
+    by_origin = {}
+    for r in recs:
+        o = r.get("origin") or "random"
+        b = by_origin.setdefault(o, {"tested": 0, "best_fitness": None, "best_dsr": 0.0, "beat_champion_in_dd": 0})
+        b["tested"] += 1
+        f = fitness(r)
+        b["best_fitness"] = round(f, 4) if b["best_fitness"] is None else round(max(b["best_fitness"], f), 4)
+        b["best_dsr"] = max(b["best_dsr"], float(r["gate_cv"]["dsr"]))
+        ch = r["gate_cv"]["checks"]
+        b["beat_champion_in_dd"] += int(ch["beats_champion_cagr"] and ch["drawdown_within_limit"])
+    allf = [fitness(r) for r in recs]
+    return {"exploit_fraction": round(exploit, 3), "learned_param_share": round(p_learned, 3),
+            "proposed_by_origin": counts, "by_origin": by_origin,
+            "best_fitness": round(max(allf), 4) if allf else None,
+            "best_dsr": max((float(r["gate_cv"]["dsr"]) for r in recs), default=None),
+            "unavailable_inputs": sorted(unavailable)}
 
 
 def _touched_series() -> dict:

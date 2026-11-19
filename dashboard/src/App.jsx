@@ -269,8 +269,8 @@ function Research() {
       </Card>
       <div className="grid g11" style={{ marginTop: 12 }}>
         <Card title="Research runs">
-          <div className="scroll"><table className="t"><thead><tr><th>Run</th><th className="num">Tested</th><th className="num">Passed WF</th><th className="num">Holdout</th><th className="num">New chall.</th><th className="num">Trials total</th><th className="num">Secs</th></tr></thead>
-            <tbody>{[...data.runs].reverse().map((r) => <tr key={r.run_id}><td className="mono">{r.run_id}</td><td className="num">{r.tested}</td><td className="num">{r.cv_passed}</td><td className="num">{r.holdout_touched}</td><td className="num">{r.new_challengers.length}</td><td className="num">{r.total_trials}</td><td className="num">{r.seconds}</td></tr>)}</tbody></table></div>
+          <div className="scroll"><table className="t"><thead><tr><th>Run</th><th className="num">Tested</th><th className="num">Passed WF</th><th className="num">Holdout</th><th className="num">New chall.</th><th className="num">Trials total</th><th className="num">Best DSR</th><th className="num">Refined</th><th className="num">Secs</th></tr></thead>
+            <tbody>{[...data.runs].reverse().map((r) => <tr key={r.run_id}><td className="mono">{r.run_id}</td><td className="num">{r.tested}</td><td className="num">{r.cv_passed}</td><td className="num">{r.holdout_touched}</td><td className="num">{r.new_challengers.length}</td><td className="num">{r.total_trials}</td><td className="num">{num(r.learning?.best_dsr, 3)}</td><td className="num">{r.learning ? Object.entries(r.learning.proposed_by_origin || {}).filter(([k]) => k !== "random").reduce((a, [, v]) => a + v, 0) : "—"}</td><td className="num">{r.seconds}</td></tr>)}</tbody></table></div>
         </Card>
         <Card title="Monthly reviews" hint="Live results vs each strategy's backtest distribution (block bootstrap).">
           {data.reviews.length ? [...data.reviews].reverse().map((r) => <div key={r.date} style={{ marginBottom: 12 }}>
