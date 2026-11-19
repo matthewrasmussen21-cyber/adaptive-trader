@@ -57,6 +57,11 @@ def behavior(spec: dict, unavailable: set[str] | frozenset = frozenset()) -> dic
         s["prefilter"] = None
     if "hold_buffer" in s:
         s["hold_buffer"] = round(float(s["hold_buffer"]), 2)
+    # With equal weights each position is 1/n, so a cap at or above 1/n never binds (the
+    # eligible universe is far larger than n): "max 35%" and "max 5%" of 24 names are the same.
+    if s.get("weighting") == "equal" and s.get("n_positions") and \
+            float(s.get("max_weight", 1.0)) >= 1.0 / int(s["n_positions"]) - 1e-9:
+        s["max_weight"] = None
     return s
 
 

@@ -75,3 +75,27 @@ def test_availability_flags_empty_series(market, ctx):
         fs.mkt = saved
     assert {"hy_spread", "hy_chg_63"} <= dead
     assert "roe" not in dead and "ret_63" not in dead
+
+
+def test_non_binding_weight_cap_is_equivalent():
+    a = copy.deepcopy(BASE); a["max_weight"] = 0.35
+    b = copy.deepcopy(BASE); b["max_weight"] = 0.05
+    c = copy.deepcopy(BASE); c["max_weight"] = 0.03            # 3% < 1/24: binds, so different
+    assert behavior_key(a) == behavior_key(b) != behavior_key(c)
+
+
+def test_ml_survives_inputs_with_no_data_in_a_training_window(market, ctx):
+    from atl.strategies.impl import ML
+    spec = {"family": "ml", "ml": {"features": ["rev_yoy_q", "ret_63", "vol_63"], "horizon": 21},
+            "n_positions": 5, "rebalance_days": 21, "weighting": "equal", "max_weight": 0.3, "hold_buffer": 1}
+
+    class Gappy(ML):
+        def _X(self, fs, rows, cols_by_row):
+            X = super()._X(fs, rows, cols_by_row)
+            return np.column_stack([X, np.full(len(X), np.nan), np.zeros(len(X))])   # empty + constant
+
+    s = Gappy(spec)
+    s.prepare(market["fs"], windows=ctx.test_windows[:1], gap_extra=5)
+    assert s.models and len(s.models[0][2].atl_live_cols) == 3
+    sc = s.scores(market["fs"], ctx.test_windows[0][0] + 5)
+    assert sc is not None and np.isfinite(sc).sum() > 5

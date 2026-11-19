@@ -159,8 +159,13 @@ class ML(Strategy):
         if len(y) < 1000:
             return None
         X = self._X(fs, rows, cols_by_row)
-        dead = np.where(~np.isfinite(X).any(axis=0))[0]     # features with no data in this window
-        X[:, dead] = 0.0
+        # Inputs with fewer than two distinct values in this training window (e.g. fundamentals
+        # before XBRL reporting began) carry no information and break histogram binning: drop them.
+        live = np.array([j for j in range(X.shape[1])
+                         if np.unique(X[np.isfinite(X[:, j]), j][:200_000]).size >= 2], dtype=int)
+        if live.size < 2:
+            return None
+        X = X[:, live]
         if len(y) > self.max_samples:
             idx = rng.choice(len(y), self.max_samples, replace=False)
             X, y = X[idx], y[idx]
@@ -171,7 +176,7 @@ class ML(Strategy):
                                               l2_regularization=float(ml.get("l2", 1.0)),
                                               min_samples_leaf=200, random_state=0)
         model.fit(X, y)
-        model.atl_dead_cols = dead
+        model.atl_live_cols = live
         return model
 
     def prepare(self, fs, windows=None, log=print, gap_extra: int = 5):
@@ -192,7 +197,9 @@ class ML(Strategy):
         if not len(e):
             return None
         X = self._X(fs, np.array([t]), [e])
-        X[:, getattr(model, "atl_dead_cols", [])] = 0.0
+        live = getattr(model, "atl_live_cols", None)
+        if live is not None:
+            X = X[:, live]
         ok = np.isfinite(X).sum(axis=1) >= X.shape[1] * 0.5
         out = np.full(len(fs.tickers), np.nan)
         if ok.any():

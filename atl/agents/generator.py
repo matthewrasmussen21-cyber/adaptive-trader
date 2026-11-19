@@ -88,7 +88,7 @@ class Generator:
         out = {"n_positions": n, "rebalance_days": _logu(r, 2, 252),
                "weighting": str(r.choice(["equal", "inv_vol"])),
                "max_weight": float(r.choice([0.05, 0.08, 0.1, 0.15, 0.2, 0.25, 0.35, 0.5])),
-               "hold_buffer": round(float(r.uniform(1.0, 3.0)), 2),
+               "hold_buffer": round(float(r.uniform(1.0, 3.0)), 1),
                "prefilter": ({"feature": self.feature(), "min_rank": round(float(r.uniform(0.05, 0.7)), 2)}
                              if r.random() < 0.4 else None),
                "regime": self.regime_filter() if r.random() < 0.3 else None}
@@ -103,7 +103,7 @@ class Generator:
         elif field == "rebalance_days":
             v = int(np.clip(round(v * np.exp(r.normal(0, 0.25))), 2, 252))
         elif field == "hold_buffer":
-            v = round(float(np.clip(v * np.exp(r.normal(0, 0.1)), 1.0, 4.0)), 2)
+            v = round(float(np.clip(v * np.exp(r.normal(0, 0.1)), 1.0, 4.0)), 1)
         if isinstance(v, dict) and (v.get("feature") in self.unavailable):
             v = None
         return v
@@ -255,7 +255,7 @@ class Generator:
             elif choice == "add_signal":
                 self._edit_terms(s, "add")
             else:
-                s["hold_buffer"] = round(float(min(4.0, s.get("hold_buffer", 1.0) * r.uniform(1.2, 1.6))), 2)
+                s["hold_buffer"] = round(float(min(4.0, s.get("hold_buffer", 1.0) * r.uniform(1.2, 1.6))), 1)
         if s["max_weight"] * s["n_positions"] < 0.5:
             s["max_weight"] = round(min(1.0, 1.0 / s["n_positions"]), 3)
         return s

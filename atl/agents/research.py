@@ -119,9 +119,11 @@ def availability(fs, ctx, log=print) -> tuple[set[str], dict]:
     for f in registry.XS:
         x = np.asarray(fs.x(f)[rows])
         cov[f] = float((np.isfinite(x) & el).sum() / denom)
-    dead = {f for f, c in cov.items() if c < (0.5 if f in registry.MKT else 0.2)}
+    # A cross-sectional feature that covers part of the universe is still usable (a rank
+    # strategy simply ignores names without data); only an essentially empty one is dead.
+    dead = {f for f, c in cov.items() if c < (0.5 if f in registry.MKT else 0.02)}
     rep = {"coverage": {k: round(v, 4) for k, v in sorted(cov.items())}, "unavailable": sorted(dead),
-           "rule": "market series < 50% coverage or cross-sectional feature < 20% of eligible cells, research period"}
+           "rule": "market series < 50% coverage or cross-sectional feature < 2% of eligible cells, research period"}
     (paths().registry / "feature_availability.json").write_text(json.dumps(rep, indent=2))
     if dead:
         log(f"unavailable inputs (excluded from new candidates): {', '.join(sorted(dead))}")
