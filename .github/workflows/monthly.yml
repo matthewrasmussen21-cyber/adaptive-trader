@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 340
     env:
       SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.CLAUDE || secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup

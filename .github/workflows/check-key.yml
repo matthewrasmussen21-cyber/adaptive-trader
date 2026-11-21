@@ -1,0 +1,19 @@
+name: check-key
+# Manual: one tiny Anthropic call with the model in config/system.toml to confirm the key works and has credit.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.CLAUDE || secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install requests
+      - run: python tools/check_anthropic.py

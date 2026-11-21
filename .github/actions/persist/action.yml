@@ -29,6 +29,7 @@ runs:
         name: dashboard
         path: dashboard.html
         retention-days: 30
+        overwrite: true   # Daily persists twice in one run; replace the first upload
     - name: Commit state
       shell: bash
       run: |
