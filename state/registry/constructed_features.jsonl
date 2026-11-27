@@ -863,3 +863,39 @@
 {"name": "ratio(dist_low_63,log_mcap)", "description": "a / b on raw values where b > 0 with a=dist_low_63, b=log_mcap", "first_used_run": "R20261126-044554", "created_by": "random"}
 {"name": "prod(log_mcap,dist_high_252)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=log_mcap, b=dist_high_252", "first_used_run": "R20261126-044554", "created_by": "random"}
 {"name": "diff(rs_spy_63,dist_high_252)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=rs_spy_63, b=dist_high_252", "first_used_run": "R20261126-044554", "created_by": "random"}
+{"name": "ratio(roe,gross_margin)", "description": "a / b on raw values where b > 0 with a=roe, b=gross_margin", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(op_margin_chg,beta_252)", "description": "a / b on raw values where b > 0 with a=op_margin_chg, b=beta_252", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(volu_chg_21_126,vol_21)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=volu_chg_21_126, b=vol_21", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(net_margin,accruals)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=net_margin, b=accruals", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(volu_chg_21_126,skew_63)", "description": "a / b on raw values where b > 0 with a=volu_chg_21_126, b=skew_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(gap_1,rs_spy_63)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=gap_1, b=rs_spy_63", "first_used_run": "R20261127-045222", "created_by": "mutation"}
+{"name": "prod(vol_ratio,days_since_filing)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=vol_ratio, b=days_since_filing", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(max_ret_21,skew_63)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=max_ret_21, b=skew_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(dist_low_252,rs_spy_63)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=dist_low_252, b=rs_spy_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(vol_21,volu_chg_21_126)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=vol_21, b=volu_chg_21_126", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(ret_63,log_mcap)", "description": "a / b on raw values where b > 0 with a=ret_63, b=log_mcap", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(vol_21,ret_5)", "description": "a / b on raw values where b > 0 with a=vol_21, b=ret_5", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(dist_high_252,ret_5)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=dist_high_252, b=ret_5", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(dist_high_252,roe)", "description": "a / b on raw values where b > 0 with a=dist_high_252, b=roe", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(vol_63,cfy)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=vol_63, b=cfy", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(dist_low_63,op_margin_chg)", "description": "a / b on raw values where b > 0 with a=dist_low_63, b=op_margin_chg", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(rs_spy_63,gap_1)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=rs_spy_63, b=gap_1", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(roe,dist_low_63)", "description": "a / b on raw values where b > 0 with a=roe, b=dist_low_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(vol_21,range_21)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=vol_21, b=range_21", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(up_frac_21,dvol_21)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=up_frac_21, b=dvol_21", "first_used_run": "R20261127-045222", "created_by": "repair"}
+{"name": "prod(roe,skew_63)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=roe, b=skew_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(roe,dvol_21)", "description": "a / b on raw values where b > 0 with a=roe, b=dvol_21", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(gap_1,ret_5)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=gap_1, b=ret_5", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(log_mcap,rs_spy_63)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=log_mcap, b=rs_spy_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(by,op_margin)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=by, b=op_margin", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(ret_126,ret_252)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=ret_126, b=ret_252", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(gap_1,dist_high_252)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=gap_1, b=dist_high_252", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(rs_spy_126,vol_21)", "description": "a / b on raw values where b > 0 with a=rs_spy_126, b=vol_21", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(idio_vol_63,net_margin)", "description": "a / b on raw values where b > 0 with a=idio_vol_63, b=net_margin", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "diff(ret_252,rs_spy_126)", "description": "a - b on raw values (both features must share units, e.g. two returns) with a=ret_252, b=rs_spy_126", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(vol_21,net_margin)", "description": "a / b on raw values where b > 0 with a=vol_21, b=net_margin", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(volu_chg_21_126,days_since_filing)", "description": "a / b on raw values where b > 0 with a=volu_chg_21_126, b=days_since_filing", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(skew_63,dist_high_63)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=skew_63, b=dist_high_63", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(log_mcap,volu_chg_21_126)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=log_mcap, b=volu_chg_21_126", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "prod(ey,range_21)", "description": "rank(a) * rank(b) \u2014 an interaction of two cross-sectional ranks with a=ey, b=range_21", "first_used_run": "R20261127-045222", "created_by": "random"}
+{"name": "ratio(rs_spy_126,volu_chg_21_126)", "description": "a / b on raw values where b > 0 with a=rs_spy_126, b=volu_chg_21_126", "first_used_run": "R20261127-045222", "created_by": "random"}
