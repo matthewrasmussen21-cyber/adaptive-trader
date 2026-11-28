@@ -1,303 +1,303 @@
 {
   "accruals": {
     "in_top_decile": 0,
-    "lift": 0.343,
+    "lift": 0.341,
     "status": "discarded",
-    "used": 161,
-    "weight": 0.343
+    "used": 174,
+    "weight": 0.341
   },
   "beta_252": {
     "in_top_decile": 1,
-    "lift": 0.343,
+    "lift": 0.346,
     "status": "neutral",
-    "used": 190,
-    "weight": 0.343
+    "used": 199,
+    "weight": 0.346
   },
   "by": {
     "in_top_decile": 29,
-    "lift": 0.628,
+    "lift": 0.609,
     "status": "neutral",
-    "used": 511,
-    "weight": 0.628
+    "used": 534,
+    "weight": 0.609
   },
   "cfy": {
     "in_top_decile": 3,
-    "lift": 0.44,
+    "lift": 0.422,
     "status": "neutral",
-    "used": 175,
-    "weight": 0.44
+    "used": 194,
+    "weight": 0.422
   },
   "days_since_filing": {
-    "in_top_decile": 3,
-    "lift": 0.347,
+    "in_top_decile": 4,
+    "lift": 0.374,
     "status": "neutral",
-    "used": 244,
-    "weight": 0.347
+    "used": 258,
+    "weight": 0.374
   },
   "dist_high_252": {
     "in_top_decile": 1,
-    "lift": 0.287,
+    "lift": 0.291,
     "status": "neutral",
-    "used": 243,
+    "used": 254,
     "weight": 0.3
   },
   "dist_high_63": {
     "in_top_decile": 0,
-    "lift": 0.298,
+    "lift": 0.296,
     "status": "discarded",
-    "used": 198,
+    "used": 214,
     "weight": 0.3
   },
   "dist_low_252": {
     "in_top_decile": 1,
-    "lift": 0.273,
+    "lift": 0.276,
     "status": "neutral",
-    "used": 260,
+    "used": 272,
     "weight": 0.3
   },
   "dist_low_63": {
-    "in_top_decile": 3,
-    "lift": 0.393,
+    "in_top_decile": 2,
+    "lift": 0.358,
     "status": "neutral",
-    "used": 206,
-    "weight": 0.393
+    "used": 217,
+    "weight": 0.358
   },
   "dvol_21": {
     "in_top_decile": 0,
-    "lift": 0.35,
+    "lift": 0.346,
     "status": "discarded",
-    "used": 156,
-    "weight": 0.35
+    "used": 170,
+    "weight": 0.346
   },
   "eps_yoy_q": {
     "in_top_decile": 0,
-    "lift": 0.303,
+    "lift": 0.302,
     "status": "discarded",
-    "used": 193,
-    "weight": 0.303
+    "used": 208,
+    "weight": 0.302
   },
   "ey": {
     "in_top_decile": 0,
-    "lift": 0.295,
+    "lift": 0.305,
     "status": "discarded",
-    "used": 201,
-    "weight": 0.3
+    "used": 205,
+    "weight": 0.305
   },
   "gap_1": {
-    "in_top_decile": 0,
-    "lift": 0.266,
-    "status": "discarded",
-    "used": 232,
-    "weight": 0.3
+    "in_top_decile": 1,
+    "lift": 0.301,
+    "status": "neutral",
+    "used": 242,
+    "weight": 0.301
   },
   "gross_margin": {
-    "in_top_decile": 146,
-    "lift": 1.286,
+    "in_top_decile": 136,
+    "lift": 1.154,
     "status": "neutral",
-    "used": 1116,
-    "weight": 1.286
+    "used": 1166,
+    "weight": 1.154
   },
   "idio_vol_63": {
-    "in_top_decile": 28,
-    "lift": 0.833,
+    "in_top_decile": 32,
+    "lift": 0.845,
     "status": "neutral",
-    "used": 353,
-    "weight": 0.833
+    "used": 395,
+    "weight": 0.845
   },
   "log_mcap": {
-    "in_top_decile": 327,
-    "lift": 1.648,
+    "in_top_decile": 361,
+    "lift": 1.633,
     "status": "favored",
-    "used": 1951,
-    "weight": 1.648
+    "used": 2175,
+    "weight": 1.633
   },
   "max_ret_21": {
-    "in_top_decile": 4,
-    "lift": 0.403,
+    "in_top_decile": 3,
+    "lift": 0.36,
     "status": "neutral",
-    "used": 224,
-    "weight": 0.403
+    "used": 243,
+    "weight": 0.36
   },
   "net_margin": {
     "in_top_decile": 72,
-    "lift": 1.278,
+    "lift": 1.186,
     "status": "neutral",
-    "used": 545,
-    "weight": 1.278
+    "used": 593,
+    "weight": 1.186
   },
   "ni_yoy_ttm": {
-    "in_top_decile": 1,
-    "lift": 0.319,
+    "in_top_decile": 2,
+    "lift": 0.351,
     "status": "neutral",
-    "used": 211,
-    "weight": 0.319
+    "used": 223,
+    "weight": 0.351
   },
   "op_margin": {
-    "in_top_decile": 228,
-    "lift": 2.053,
+    "in_top_decile": 227,
+    "lift": 1.928,
     "status": "favored",
-    "used": 1067,
-    "weight": 2.053
+    "used": 1134,
+    "weight": 1.928
   },
   "op_margin_chg": {
     "in_top_decile": 2,
-    "lift": 0.301,
+    "lift": 0.306,
     "status": "neutral",
-    "used": 262,
-    "weight": 0.301
+    "used": 270,
+    "weight": 0.306
   },
   "range_21": {
-    "in_top_decile": 91,
-    "lift": 1.043,
+    "in_top_decile": 111,
+    "lift": 1.146,
     "status": "neutral",
-    "used": 869,
-    "weight": 1.043
+    "used": 957,
+    "weight": 1.146
   },
   "ret_126": {
     "in_top_decile": 1,
-    "lift": 0.265,
+    "lift": 0.27,
     "status": "neutral",
-    "used": 271,
+    "used": 280,
     "weight": 0.3
   },
   "ret_21": {
     "in_top_decile": 2,
-    "lift": 0.339,
+    "lift": 0.335,
     "status": "neutral",
-    "used": 223,
-    "weight": 0.339
+    "used": 238,
+    "weight": 0.335
   },
   "ret_252": {
     "in_top_decile": 7,
-    "lift": 0.456,
+    "lift": 0.448,
     "status": "neutral",
-    "used": 254,
-    "weight": 0.456
+    "used": 267,
+    "weight": 0.448
   },
   "ret_5": {
-    "in_top_decile": 1,
-    "lift": 0.323,
+    "in_top_decile": 2,
+    "lift": 0.354,
     "status": "neutral",
-    "used": 207,
-    "weight": 0.323
+    "used": 221,
+    "weight": 0.354
   },
   "ret_63": {
-    "in_top_decile": 10,
-    "lift": 0.347,
+    "in_top_decile": 9,
+    "lift": 0.327,
     "status": "neutral",
-    "used": 446,
-    "weight": 0.347
+    "used": 461,
+    "weight": 0.327
   },
   "rev_yoy_q": {
     "in_top_decile": 13,
-    "lift": 0.539,
+    "lift": 0.524,
     "status": "neutral",
-    "used": 313,
-    "weight": 0.539
+    "used": 330,
+    "weight": 0.524
   },
   "rev_yoy_ttm": {
     "in_top_decile": 1,
-    "lift": 0.371,
+    "lift": 0.382,
     "status": "neutral",
-    "used": 169,
-    "weight": 0.371
+    "used": 172,
+    "weight": 0.382
   },
   "roe": {
-    "in_top_decile": 307,
-    "lift": 2.158,
+    "in_top_decile": 344,
+    "lift": 2.139,
     "status": "favored",
-    "used": 1377,
-    "weight": 2.158
+    "used": 1560,
+    "weight": 2.139
   },
   "rs_sector_21": {
     "in_top_decile": 4,
-    "lift": 0.312,
+    "lift": 0.316,
     "status": "neutral",
-    "used": 313,
-    "weight": 0.312
+    "used": 321,
+    "weight": 0.316
   },
   "rs_sector_63": {
     "in_top_decile": 5,
-    "lift": 0.353,
+    "lift": 0.355,
     "status": "neutral",
-    "used": 296,
-    "weight": 0.353
+    "used": 304,
+    "weight": 0.355
   },
   "rs_spy_126": {
     "in_top_decile": 9,
-    "lift": 0.452,
+    "lift": 0.432,
     "status": "neutral",
-    "used": 301,
-    "weight": 0.452
+    "used": 327,
+    "weight": 0.432
   },
   "rs_spy_63": {
-    "in_top_decile": 2,
-    "lift": 0.345,
+    "in_top_decile": 1,
+    "lift": 0.312,
     "status": "neutral",
-    "used": 217,
-    "weight": 0.345
+    "used": 230,
+    "weight": 0.312
   },
   "share_chg_yoy": {
     "in_top_decile": 1,
     "lift": 0.337,
     "status": "neutral",
-    "used": 195,
+    "used": 207,
     "weight": 0.337
   },
   "skew_63": {
-    "in_top_decile": 40,
-    "lift": 0.875,
+    "in_top_decile": 37,
+    "lift": 0.785,
     "status": "neutral",
-    "used": 469,
-    "weight": 0.875
+    "used": 496,
+    "weight": 0.785
   },
   "sy": {
     "in_top_decile": 3,
-    "lift": 0.333,
+    "lift": 0.338,
     "status": "neutral",
-    "used": 258,
-    "weight": 0.333
+    "used": 265,
+    "weight": 0.338
   },
   "up_frac_21": {
     "in_top_decile": 3,
-    "lift": 0.322,
+    "lift": 0.326,
     "status": "neutral",
-    "used": 270,
-    "weight": 0.322
+    "used": 278,
+    "weight": 0.326
   },
   "vol_21": {
-    "in_top_decile": 93,
-    "lift": 1.406,
+    "in_top_decile": 114,
+    "lift": 1.462,
     "status": "neutral",
-    "used": 637,
-    "weight": 1.406
+    "used": 751,
+    "weight": 1.462
   },
   "vol_63": {
-    "in_top_decile": 4,
-    "lift": 0.298,
+    "in_top_decile": 6,
+    "lift": 0.341,
     "status": "neutral",
-    "used": 332,
-    "weight": 0.3
+    "used": 350,
+    "weight": 0.341
   },
   "vol_ratio": {
     "in_top_decile": 0,
-    "lift": 0.238,
+    "lift": 0.244,
     "status": "discarded",
-    "used": 269,
+    "used": 279,
     "weight": 0.3
   },
   "volu_chg_21_126": {
-    "in_top_decile": 25,
-    "lift": 0.994,
+    "in_top_decile": 32,
+    "lift": 1.065,
     "status": "neutral",
-    "used": 252,
-    "weight": 0.994
+    "used": 295,
+    "weight": 1.065
   },
   "volu_chg_5_63": {
-    "in_top_decile": 17,
-    "lift": 0.585,
+    "in_top_decile": 18,
+    "lift": 0.584,
     "status": "neutral",
-    "used": 350,
-    "weight": 0.585
+    "used": 372,
+    "weight": 0.584
   }
 }
